@@ -17,6 +17,7 @@ export const menuItems = {
                 routes: [
                     { path: '/process/todo', name: '待办任务' },
                     { path: '/process/history', name: '已办历史' },
+                    { path: '/process/my-request', name: '我的申请' },
                 ],
             },
             {
@@ -31,6 +32,10 @@ export const menuItems = {
                 path: '/admin',
                 name: '系统管理',
                 icon: <SettingOutlined />,
+                routes: [
+                    { path: '/admin/users', name: '用户管理' },
+                    { path: '/admin/permissions', name: '权限配置' },
+                ],
             },
         ],
     },

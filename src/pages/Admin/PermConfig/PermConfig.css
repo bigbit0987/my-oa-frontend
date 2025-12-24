@@ -1,0 +1,45 @@
+/**
+ * PermConfig 样式
+ */
+
+.perm-config-container {
+    padding: 0;
+}
+
+.perm-config-card {
+    border-radius: 12px;
+}
+
+.perm-config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.perm-config-header h4 {
+    margin: 0 0 4px !important;
+}
+
+.process-tabs {
+    margin-bottom: 16px;
+}
+
+.permission-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.perm-config-card .ant-table-thead>tr>th {
+    background: #f0f5ff;
+    font-weight: 600;
+}
+
+.perm-config-card .ant-table-cell {
+    vertical-align: middle;
+}

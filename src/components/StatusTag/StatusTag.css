@@ -1,0 +1,26 @@
+/**
+ * StatusTag 样式
+ */
+
+.status-tag {
+    border-radius: 4px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-tag-small {
+    font-size: 12px;
+    padding: 0 6px;
+    line-height: 18px;
+}
+
+/* 增强图标样式 */
+.status-tag .anticon {
+    font-size: 12px;
+}
+
+.status-tag-small .anticon {
+    font-size: 10px;
+}

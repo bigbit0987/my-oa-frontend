@@ -1,0 +1,12 @@
+/**
+ * UserManage 样式
+ */
+
+.user-manage-container {
+    padding: 0;
+}
+
+.user-manage-container .ant-pro-table {
+    background: #ffffff;
+    border-radius: 12px;
+}

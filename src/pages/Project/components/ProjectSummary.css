@@ -1,0 +1,218 @@
+/**
+ * ProjectSummary 样式
+ * 项目摘要卡片样式定义
+ */
+
+.project-summary-card {
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.project-summary-card.is-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+}
+
+.project-summary-card .ant-card-body {
+    padding: 24px;
+}
+
+.summary-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+/* 左侧基本信息 */
+.summary-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.project-identity {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-code {
+    font-family: 'SF Mono', 'Monaco', monospace;
+    font-size: 12px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.project-name {
+    margin: 0 !important;
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+}
+
+.project-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.project-tags .ant-tag {
+    margin: 0;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.project-description {
+    margin-bottom: 16px !important;
+    line-height: 1.6;
+}
+
+/* 项目元信息 */
+.project-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.meta-item .anticon {
+    font-size: 14px;
+    color: #1890ff;
+}
+
+/* 右侧统计数据 */
+.summary-stats {
+    flex-shrink: 0;
+}
+
+.summary-stats .ant-row {
+    display: flex;
+    gap: 16px;
+}
+
+.summary-stats .ant-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    min-width: 80px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-label {
+    font-size: 12px;
+}
+
+.progress-text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-stats .ant-statistic-title {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.summary-stats .ant-statistic-content {
+    font-size: 18px !important;
+}
+
+/* 吸顶模式简化样式 */
+.project-summary-card.is-sticky .summary-content {
+    align-items: center;
+}
+
+.project-summary-card.is-sticky .project-header {
+    margin-bottom: 0;
+}
+
+.project-summary-card.is-sticky .project-meta {
+    margin-top: 8px;
+}
+
+.project-summary-card.is-sticky .summary-stats .ant-col {
+    padding: 8px 12px;
+}
+
+/* 响应式适配 */
+@media (max-width: 992px) {
+    .summary-content {
+        flex-direction: column;
+    }
+
+    .summary-stats {
+        width: 100%;
+    }
+
+    .summary-stats .ant-row {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-summary-card .ant-card-body {
+        padding: 16px;
+    }
+
+    .project-header {
+        flex-direction: column;
+    }
+
+    .project-tags {
+        margin-top: 8px;
+    }
+
+    .project-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .summary-stats .ant-col {
+        min-width: 60px;
+        padding: 8px 10px;
+    }
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+    .project-summary-card {
+        background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+    }
+
+    .summary-stats .ant-col {
+        background: rgba(255, 255, 255, 0.04);
+    }
+}
+
+/* 动画效果 */
+.project-summary-card:hover:not(.is-sticky) {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}

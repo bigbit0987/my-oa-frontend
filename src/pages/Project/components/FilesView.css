@@ -1,0 +1,138 @@
+/**
+ * FilesView 样式
+ * 附件聚合柜样式
+ */
+
+.files-view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 顶部统计和筛选卡片 */
+.files-header-card {
+    border-radius: 12px;
+}
+
+.files-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.files-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.files-stats .ant-typography {
+    margin: 0;
+}
+
+.files-stats h5 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.files-stats h5 .anticon {
+    color: #1890ff;
+}
+
+.files-filter {
+    display: flex;
+    gap: 8px;
+}
+
+/* 文件内容卡片 */
+.files-content-card {
+    border-radius: 12px;
+}
+
+/* 阶段折叠面板 */
+.phase-collapse {
+    background: transparent;
+    border: none;
+}
+
+.phase-collapse .ant-collapse-item {
+    background: #ffffff;
+    border-radius: 8px !important;
+    margin-bottom: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.phase-collapse .ant-collapse-item:last-child {
+    margin-bottom: 0;
+}
+
+.phase-collapse .ant-collapse-header {
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+}
+
+.phase-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.phase-header .anticon {
+    color: #1890ff;
+    font-size: 16px;
+}
+
+.phase-header .ant-badge {
+    margin-left: 8px;
+}
+
+.phase-collapse .ant-collapse-content {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.phase-collapse .ant-collapse-content-box {
+    padding: 0;
+}
+
+/* 文件名样式 */
+.file-name {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.file-name:hover {
+    color: #1890ff;
+}
+
+/* 表格美化 */
+.files-view .ant-table-thead>tr>th {
+    background: #fafafa;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.files-view .ant-table-tbody>tr:hover>td {
+    background: #f0f7ff;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .files-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .files-filter {
+        flex-wrap: wrap;
+    }
+
+    .files-filter .ant-input-search,
+    .files-filter .ant-select {
+        width: 100% !important;
+    }
+}

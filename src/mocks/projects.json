@@ -1,0 +1,417 @@
+{
+    "projects": [
+        {
+            "id": "proj-001",
+            "code": "2024-ZX-001",
+            "name": "新能源汽车智能充电桩系统开发",
+            "type": "研发项目",
+            "status": "进行中",
+            "phase": "设计阶段",
+            "priority": "high",
+            "progress": 45,
+            "startDate": "2024-01-15",
+            "endDate": "2024-12-31",
+            "budget": 5800000,
+            "usedBudget": 2610000,
+            "manager": {
+                "id": "user-001",
+                "name": "张明",
+                "avatar": null,
+                "department": "研发一部"
+            },
+            "department": "研发一部",
+            "client": "新能源科技有限公司",
+            "description": "基于物联网技术的智能充电桩管理系统，包含充电桩硬件控制、用户APP、运营管理平台等模块",
+            "teamSize": 12,
+            "contractCount": 3,
+            "fileCount": 58,
+            "phases": [
+                {
+                    "name": "需求分析",
+                    "status": "completed",
+                    "startDate": "2024-01-15",
+                    "endDate": "2024-02-28"
+                },
+                {
+                    "name": "系统设计",
+                    "status": "completed",
+                    "startDate": "2024-03-01",
+                    "endDate": "2024-04-15"
+                },
+                {
+                    "name": "详细设计",
+                    "status": "active",
+                    "startDate": "2024-04-16",
+                    "endDate": "2024-06-30"
+                },
+                {
+                    "name": "开发实施",
+                    "status": "pending",
+                    "startDate": "2024-07-01",
+                    "endDate": "2024-10-31"
+                },
+                {
+                    "name": "测试验收",
+                    "status": "pending",
+                    "startDate": "2024-11-01",
+                    "endDate": "2024-12-31"
+                }
+            ],
+            "team": [
+                {
+                    "id": "user-001",
+                    "name": "张明",
+                    "role": "项目经理",
+                    "workload": 100
+                },
+                {
+                    "id": "user-002",
+                    "name": "李华",
+                    "role": "技术负责人",
+                    "workload": 80
+                },
+                {
+                    "id": "user-003",
+                    "name": "王芳",
+                    "role": "需求分析师",
+                    "workload": 60
+                },
+                {
+                    "id": "user-004",
+                    "name": "赵强",
+                    "role": "后端开发",
+                    "workload": 100
+                },
+                {
+                    "id": "user-005",
+                    "name": "孙丽",
+                    "role": "前端开发",
+                    "workload": 90
+                },
+                {
+                    "id": "user-006",
+                    "name": "周涛",
+                    "role": "测试工程师",
+                    "workload": 40
+                }
+            ],
+            "contracts": [
+                {
+                    "id": "contract-001",
+                    "name": "主合同",
+                    "amount": 5000000,
+                    "status": "生效",
+                    "signDate": "2024-01-10"
+                },
+                {
+                    "id": "contract-002",
+                    "name": "补充协议一",
+                    "amount": 500000,
+                    "status": "生效",
+                    "signDate": "2024-04-20"
+                },
+                {
+                    "id": "contract-003",
+                    "name": "维保合同",
+                    "amount": 300000,
+                    "status": "待签",
+                    "signDate": null
+                }
+            ],
+            "files": [
+                {
+                    "id": "file-001",
+                    "name": "需求规格说明书.docx",
+                    "phase": "需求分析",
+                    "type": "文档",
+                    "size": 2048000,
+                    "uploadTime": "2024-02-20"
+                },
+                {
+                    "id": "file-002",
+                    "name": "系统架构设计.pdf",
+                    "phase": "系统设计",
+                    "type": "设计",
+                    "size": 5120000,
+                    "uploadTime": "2024-04-01"
+                },
+                {
+                    "id": "file-003",
+                    "name": "接口设计文档.docx",
+                    "phase": "详细设计",
+                    "type": "设计",
+                    "size": 1536000,
+                    "uploadTime": "2024-05-15"
+                },
+                {
+                    "id": "file-004",
+                    "name": "数据库设计ER图.png",
+                    "phase": "详细设计",
+                    "type": "图片",
+                    "size": 512000,
+                    "uploadTime": "2024-05-20"
+                }
+            ]
+        },
+        {
+            "id": "proj-002",
+            "code": "2024-JZ-002",
+            "name": "城市智慧交通信号优化系统",
+            "type": "工程项目",
+            "status": "进行中",
+            "phase": "开发阶段",
+            "priority": "high",
+            "progress": 68,
+            "startDate": "2023-09-01",
+            "endDate": "2024-08-31",
+            "budget": 12500000,
+            "usedBudget": 8500000,
+            "manager": {
+                "id": "user-007",
+                "name": "陈伟",
+                "avatar": null,
+                "department": "工程部"
+            },
+            "department": "工程部",
+            "client": "市交通管理局",
+            "description": "基于AI算法的城市交通信号优化系统，实现交通流量实时监测和信号灯智能调控",
+            "teamSize": 25,
+            "contractCount": 5,
+            "fileCount": 142,
+            "phases": [
+                {
+                    "name": "需求分析",
+                    "status": "completed",
+                    "startDate": "2023-09-01",
+                    "endDate": "2023-10-31"
+                },
+                {
+                    "name": "方案设计",
+                    "status": "completed",
+                    "startDate": "2023-11-01",
+                    "endDate": "2023-12-31"
+                },
+                {
+                    "name": "硬件部署",
+                    "status": "completed",
+                    "startDate": "2024-01-01",
+                    "endDate": "2024-03-31"
+                },
+                {
+                    "name": "软件开发",
+                    "status": "active",
+                    "startDate": "2024-04-01",
+                    "endDate": "2024-06-30"
+                },
+                {
+                    "name": "联调测试",
+                    "status": "pending",
+                    "startDate": "2024-07-01",
+                    "endDate": "2024-08-31"
+                }
+            ],
+            "team": [
+                {
+                    "id": "user-007",
+                    "name": "陈伟",
+                    "role": "项目经理",
+                    "workload": 100
+                },
+                {
+                    "id": "user-008",
+                    "name": "刘洋",
+                    "role": "技术总监",
+                    "workload": 80
+                }
+            ],
+            "contracts": [
+                {
+                    "id": "contract-004",
+                    "name": "总包合同",
+                    "amount": 10000000,
+                    "status": "生效",
+                    "signDate": "2023-08-25"
+                },
+                {
+                    "id": "contract-005",
+                    "name": "设备采购合同",
+                    "amount": 2500000,
+                    "status": "生效",
+                    "signDate": "2023-12-15"
+                }
+            ],
+            "files": []
+        },
+        {
+            "id": "proj-003",
+            "code": "2024-ZX-003",
+            "name": "企业人力资源管理平台升级",
+            "type": "服务项目",
+            "status": "待启动",
+            "phase": "立项阶段",
+            "priority": "medium",
+            "progress": 10,
+            "startDate": "2024-07-01",
+            "endDate": "2024-12-31",
+            "budget": 800000,
+            "usedBudget": 80000,
+            "manager": {
+                "id": "user-009",
+                "name": "林静",
+                "avatar": null,
+                "department": "软件部"
+            },
+            "department": "软件部",
+            "client": "内部项目",
+            "description": "现有HR系统的全面升级，包括招聘、考勤、绩效、培训等模块的优化",
+            "teamSize": 6,
+            "contractCount": 1,
+            "fileCount": 12,
+            "phases": [
+                {
+                    "name": "立项评审",
+                    "status": "active",
+                    "startDate": "2024-07-01",
+                    "endDate": "2024-07-15"
+                },
+                {
+                    "name": "需求调研",
+                    "status": "pending",
+                    "startDate": "2024-07-16",
+                    "endDate": "2024-08-15"
+                },
+                {
+                    "name": "开发实施",
+                    "status": "pending",
+                    "startDate": "2024-08-16",
+                    "endDate": "2024-11-30"
+                },
+                {
+                    "name": "上线部署",
+                    "status": "pending",
+                    "startDate": "2024-12-01",
+                    "endDate": "2024-12-31"
+                }
+            ],
+            "team": [],
+            "contracts": [],
+            "files": []
+        },
+        {
+            "id": "proj-004",
+            "code": "2023-JZ-015",
+            "name": "工业园区安防监控系统",
+            "type": "工程项目",
+            "status": "已完成",
+            "phase": "验收阶段",
+            "priority": "low",
+            "progress": 100,
+            "startDate": "2023-03-01",
+            "endDate": "2023-12-31",
+            "budget": 3500000,
+            "usedBudget": 3200000,
+            "manager": {
+                "id": "user-010",
+                "name": "黄磊",
+                "avatar": null,
+                "department": "安防部"
+            },
+            "department": "安防部",
+            "client": "某工业园区管委会",
+            "description": "覆盖整个园区的智能安防监控系统，包含200+摄像头、人脸识别、车辆识别等功能",
+            "teamSize": 15,
+            "contractCount": 4,
+            "fileCount": 256,
+            "phases": [
+                {
+                    "name": "需求分析",
+                    "status": "completed",
+                    "startDate": "2023-03-01",
+                    "endDate": "2023-04-15"
+                },
+                {
+                    "name": "方案设计",
+                    "status": "completed",
+                    "startDate": "2023-04-16",
+                    "endDate": "2023-05-31"
+                },
+                {
+                    "name": "设备采购",
+                    "status": "completed",
+                    "startDate": "2023-06-01",
+                    "endDate": "2023-07-31"
+                },
+                {
+                    "name": "施工安装",
+                    "status": "completed",
+                    "startDate": "2023-08-01",
+                    "endDate": "2023-11-15"
+                },
+                {
+                    "name": "验收交付",
+                    "status": "completed",
+                    "startDate": "2023-11-16",
+                    "endDate": "2023-12-31"
+                }
+            ],
+            "team": [],
+            "contracts": [],
+            "files": []
+        },
+        {
+            "id": "proj-005",
+            "code": "2024-ZX-005",
+            "name": "跨境电商物流追踪系统",
+            "type": "研发项目",
+            "status": "进行中",
+            "phase": "需求阶段",
+            "priority": "medium",
+            "progress": 25,
+            "startDate": "2024-05-01",
+            "endDate": "2025-04-30",
+            "budget": 4200000,
+            "usedBudget": 1050000,
+            "manager": {
+                "id": "user-011",
+                "name": "杨帆",
+                "avatar": null,
+                "department": "研发二部"
+            },
+            "department": "研发二部",
+            "client": "某跨境电商平台",
+            "description": "整合多国物流信息的全链路追踪系统，支持多语言、多币种、多时区",
+            "teamSize": 10,
+            "contractCount": 2,
+            "fileCount": 35,
+            "phases": [
+                {
+                    "name": "需求分析",
+                    "status": "active",
+                    "startDate": "2024-05-01",
+                    "endDate": "2024-07-31"
+                },
+                {
+                    "name": "系统设计",
+                    "status": "pending",
+                    "startDate": "2024-08-01",
+                    "endDate": "2024-10-31"
+                },
+                {
+                    "name": "开发实施",
+                    "status": "pending",
+                    "startDate": "2024-11-01",
+                    "endDate": "2025-02-28"
+                },
+                {
+                    "name": "测试验收",
+                    "status": "pending",
+                    "startDate": "2025-03-01",
+                    "endDate": "2025-04-30"
+                }
+            ],
+            "team": [],
+            "contracts": [],
+            "files": []
+        }
+    ]
+}

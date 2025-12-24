@@ -1,0 +1,201 @@
+/**
+ * ProjectList 样式
+ * 项目台账页面样式定义
+ */
+
+.project-list-container {
+    padding: 0;
+}
+
+/* 统计卡片区域 */
+.stats-row {
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card .ant-statistic-title {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+    margin-bottom: 8px;
+}
+
+.stat-card .ant-statistic-content {
+    display: flex;
+    align-items: baseline;
+}
+
+.stat-card .ant-statistic-content-prefix {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.stat-card .ant-statistic-content-value {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* 特殊卡片渐变背景 */
+.stat-card-total {
+    background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+}
+
+.stat-card-progress {
+    background: linear-gradient(135deg, #f6ffed 0%, #ffffff 100%);
+}
+
+.stat-card-pending {
+    background: linear-gradient(135deg, #fffbe6 0%, #ffffff 100%);
+}
+
+.stat-card-budget {
+    background: linear-gradient(135deg, #f9f0ff 0%, #ffffff 100%);
+}
+
+/* 项目表格 */
+.project-table {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.project-table .ant-pro-table-search {
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 0;
+}
+
+.project-table .ant-table-wrapper {
+    padding: 0 16px 16px;
+}
+
+/* 项目编号样式 */
+.project-code {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    color: #1890ff;
+    font-size: 13px;
+}
+
+/* 项目名称单元格 */
+.project-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.project-name-link {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.project-name-link:hover {
+    color: #1890ff !important;
+}
+
+.project-phase {
+    font-size: 12px;
+}
+
+/* 进度条美化 */
+.project-table .ant-progress-inner {
+    background-color: #f0f0f0;
+}
+
+.project-table .ant-progress-text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 操作按钮 */
+.project-table .ant-btn-primary {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+    border: none;
+}
+
+.project-table .ant-btn-primary:hover {
+    background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+}
+
+/* 工具栏美化 */
+.project-table .ant-pro-table-list-toolbar {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.project-table .ant-pro-table-list-toolbar-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .stats-row .ant-col {
+        margin-bottom: 12px;
+    }
+
+    .stat-card .ant-statistic-content-value {
+        font-size: 24px;
+    }
+
+    .project-table .ant-pro-table-search {
+        padding: 12px 16px;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .stat-card {
+        background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .project-table {
+        background: #1f1f1f;
+    }
+}
+
+/* 表格行悬浮效果 */
+.project-table .ant-table-tbody>tr:hover>td {
+    background: #f0f7ff !important;
+}
+
+/* 标签美化 */
+.project-table .ant-tag {
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* 筛选区域美化 */
+.project-table .ant-form-item {
+    margin-bottom: 16px;
+}
+
+.project-table .ant-form-item-label>label {
+    color: rgba(0, 0, 0, 0.65);
+    font-weight: 500;
+}
+
+/* 分页器美化 */
+.project-table .ant-pagination {
+    margin: 16px 0;
+}
+
+.project-table .ant-pagination-item-active {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+    border-color: transparent;
+}
+
+.project-table .ant-pagination-item-active a {
+    color: #ffffff;
+}

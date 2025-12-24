@@ -3,9 +3,8 @@ import MainLayout from '@/layouts/MainLayout';
 import Dashboard from '@/pages/Dashboard';
 import TaskList from '@/pages/Process/TaskList';
 import TaskHandle from '@/pages/Process/TaskHandle';
-
-// 占位组件，后续 Phase 4 会替换
-const ProjectCenter = () => <div>Project Center Content (Phase 4)</div>;
+import ProjectList from '@/pages/Project/ProjectList';
+import ProjectDetail from '@/pages/Project/ProjectDetail';
 
 export const router = createBrowserRouter([
     {
@@ -44,8 +43,21 @@ export const router = createBrowserRouter([
             },
             // 项目中心路由
             {
-                path: 'project/*',
-                element: <ProjectCenter />,
+                path: 'project',
+                children: [
+                    {
+                        path: '',
+                        element: <Navigate to="/project/list" replace />,
+                    },
+                    {
+                        path: 'list',
+                        element: <ProjectList />,
+                    },
+                    {
+                        path: ':projectId',
+                        element: <ProjectDetail />,
+                    },
+                ],
             },
             {
                 path: 'admin/*',

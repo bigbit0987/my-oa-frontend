@@ -1,0 +1,134 @@
+/**
+ * TeamView 样式
+ * 人力负荷视图样式
+ */
+
+.team-view {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 团队概览卡片 */
+.team-overview-card {
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f0f5ff 0%, #ffffff 100%);
+    border: 1px solid rgba(24, 144, 255, 0.2);
+}
+
+.overview-stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    font-size: 32px;
+    color: #1890ff;
+    background: rgba(24, 144, 255, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-content .ant-typography {
+    margin: 0 !important;
+}
+
+.workload-distribution {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.distribution-tags {
+    flex-wrap: wrap;
+}
+
+/* 成员卡片 */
+.members-card {
+    border-radius: 12px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.card-title .anticon {
+    color: #1890ff;
+    font-size: 18px;
+}
+
+.member-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.member-card .ant-card-body {
+    padding: 20px;
+}
+
+.member-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.member-avatar {
+    margin-bottom: 4px;
+}
+
+.member-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.member-name {
+    font-size: 15px;
+}
+
+.role-tag {
+    margin: 0;
+    border-radius: 6px;
+}
+
+.member-workload {
+    width: 100%;
+}
+
+.workload-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.workload-header .ant-typography {
+    font-size: 12px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .team-overview-card .ant-row>.ant-col {
+        margin-bottom: 16px;
+    }
+
+    .overview-stat {
+        flex-direction: column;
+        text-align: center;
+    }
+}

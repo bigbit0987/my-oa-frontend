@@ -1,0 +1,114 @@
+/**
+ * FinanceView 样式
+ * 资金/合同看板样式
+ */
+
+.finance-view {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 预算卡片 */
+.budget-cards {
+    margin-bottom: 0;
+}
+
+.budget-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.budget-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.budget-card .ant-card-body {
+    padding: 20px;
+}
+
+.budget-total {
+    background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+    border: 1px solid #91d5ff;
+}
+
+.budget-used {
+    background: linear-gradient(135deg, #fff7e6 0%, #ffffff 100%);
+    border: 1px solid #ffd591;
+}
+
+.budget-remaining {
+    background: linear-gradient(135deg, #f6ffed 0%, #ffffff 100%);
+    border: 1px solid #b7eb8f;
+}
+
+.budget-progress {
+    background: linear-gradient(135deg, #f9f0ff 0%, #ffffff 100%);
+    border: 1px solid #d3adf7;
+}
+
+.progress-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.budget-card .ant-statistic-title {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+    margin-bottom: 8px;
+}
+
+.budget-card .ant-statistic-content-prefix {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+/* 合同信息卡片 */
+.contract-card {
+    border-radius: 12px;
+}
+
+.contract-card .ant-card-head {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.card-title .anticon {
+    color: #1890ff;
+    font-size: 18px;
+}
+
+.card-title .ant-tag {
+    margin-left: 4px;
+}
+
+/* 表格美化 */
+.contract-card .ant-table-thead>tr>th {
+    background: #fafafa;
+    font-weight: 600;
+}
+
+.contract-card .ant-table-tbody>tr:hover>td {
+    background: #f0f7ff;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .budget-cards .ant-col {
+        margin-bottom: 12px;
+    }
+
+    .budget-card .ant-statistic-content-value {
+        font-size: 24px !important;
+    }
+}

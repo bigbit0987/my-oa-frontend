@@ -1,0 +1,170 @@
+/**
+ * TaskHandle 页面样式
+ * 三段式布局: 表单(80%) + 时间线(20%) + 吸底操作栏
+ */
+
+.task-handle-container {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 120px);
+    background: #f0f2f5;
+    margin: -24px;
+    padding: 24px;
+}
+
+/* 加载状态 */
+.task-handle-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+/* 顶部导航区 */
+.task-handle-header {
+    margin-bottom: 16px;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #1890ff;
+    cursor: pointer;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.task-title {
+    margin: 0 !important;
+    flex: 1;
+}
+
+/* 流程进度图卡片 */
+.process-diagram-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+}
+
+/* 主体内容区 - Flex 布局 */
+.task-handle-body {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 左侧表单区域 */
+.form-section {
+    flex: 4;
+    /* 80% */
+    min-width: 0;
+}
+
+.form-card {
+    height: 100%;
+    border-radius: 12px;
+}
+
+.form-card .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.form-card .ant-card-head-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form-card .ant-card-body {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+}
+
+/* 右侧时间线区域 */
+.timeline-section {
+    flex: 1;
+    /* 20% */
+    min-width: 280px;
+    max-width: 360px;
+}
+
+.timeline-card {
+    height: 100%;
+    border-radius: 12px;
+    position: sticky;
+    top: 24px;
+}
+
+.timeline-card .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.timeline-card .ant-card-body {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+}
+
+/* 响应式布局 */
+@media (max-width: 1024px) {
+    .task-handle-body {
+        flex-direction: column;
+    }
+
+    .timeline-section {
+        max-width: none;
+        min-width: auto;
+    }
+
+    .timeline-card {
+        position: static;
+    }
+
+    .form-card .ant-card-body,
+    .timeline-card .ant-card-body {
+        max-height: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .task-handle-container {
+        margin: -16px;
+        padding: 16px;
+    }
+
+    .header-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* 滚动条美化 */
+.form-card .ant-card-body::-webkit-scrollbar,
+.timeline-card .ant-card-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.form-card .ant-card-body::-webkit-scrollbar-track,
+.timeline-card .ant-card-body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 3px;
+}
+
+.form-card .ant-card-body::-webkit-scrollbar-thumb,
+.timeline-card .ant-card-body::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 3px;
+}
+
+.form-card .ant-card-body::-webkit-scrollbar-thumb:hover,
+.timeline-card .ant-card-body::-webkit-scrollbar-thumb:hover {
+    background: #bfbfbf;
+}

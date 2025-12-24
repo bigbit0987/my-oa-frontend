@@ -1,0 +1,217 @@
+{
+    "taskInfo": {
+        "id": "task-001",
+        "processInstanceId": "proc-001",
+        "processName": "设计输入评审",
+        "taskName": "技术负责人审核",
+        "taskDefinitionKey": "review_by_tech_lead",
+        "createTime": "2024-12-24T10:00:00",
+        "dueDate": "2024-12-26T18:00:00",
+        "assignee": {
+            "id": "user-001",
+            "name": "张三",
+            "department": "技术部"
+        }
+    },
+    "formSchema": {
+        "type": "object",
+        "properties": {
+            "projectInfo": {
+                "type": "void",
+                "x-component": "FormCollapse",
+                "x-component-props": {
+                    "defaultActiveKey": [
+                        "basic",
+                        "content"
+                    ]
+                },
+                "properties": {
+                    "basic": {
+                        "type": "void",
+                        "x-component": "FormCollapse.CollapsePanel",
+                        "x-component-props": {
+                            "header": "基本信息"
+                        },
+                        "properties": {
+                            "projectName": {
+                                "type": "string",
+                                "title": "项目名称",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入项目名称"
+                                },
+                                "default": "某城市综合管廊项目"
+                            },
+                            "projectCode": {
+                                "type": "string",
+                                "title": "项目编号",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "default": "PRJ-2024-001"
+                            },
+                            "projectManager": {
+                                "type": "string",
+                                "title": "项目负责人",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "default": "李四"
+                            },
+                            "department": {
+                                "type": "string",
+                                "title": "承担部门",
+                                "x-decorator": "FormItem",
+                                "x-component": "Select",
+                                "x-component-props": {
+                                    "options": [
+                                        {
+                                            "label": "设计一所",
+                                            "value": "dept1"
+                                        },
+                                        {
+                                            "label": "设计二所",
+                                            "value": "dept2"
+                                        },
+                                        {
+                                            "label": "设计三所",
+                                            "value": "dept3"
+                                        }
+                                    ]
+                                },
+                                "default": "dept1"
+                            }
+                        }
+                    },
+                    "content": {
+                        "type": "void",
+                        "x-component": "FormCollapse.CollapsePanel",
+                        "x-component-props": {
+                            "header": "设计输入内容"
+                        },
+                        "properties": {
+                            "designScope": {
+                                "type": "string",
+                                "title": "设计范围",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input.TextArea",
+                                "x-component-props": {
+                                    "rows": 4,
+                                    "placeholder": "请描述设计范围"
+                                },
+                                "default": "包含管廊主体结构设计、附属工程设计、机电系统设计等。"
+                            },
+                            "technicalRequirements": {
+                                "type": "string",
+                                "title": "技术要求",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input.TextArea",
+                                "x-component-props": {
+                                    "rows": 4
+                                },
+                                "default": "1. 符合国家及地方相关规范标准\n2. 设计使用年限100年\n3. 抗震设防烈度7度"
+                            },
+                            "startDate": {
+                                "type": "string",
+                                "title": "计划开始日期",
+                                "x-decorator": "FormItem",
+                                "x-component": "DatePicker",
+                                "default": "2024-01-15"
+                            },
+                            "endDate": {
+                                "type": "string",
+                                "title": "计划完成日期",
+                                "x-decorator": "FormItem",
+                                "x-component": "DatePicker",
+                                "default": "2024-06-30"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "processNodes": [
+        {
+            "id": "start",
+            "name": "开始",
+            "type": "start",
+            "status": "completed"
+        },
+        {
+            "id": "submit",
+            "name": "提交申请",
+            "type": "userTask",
+            "status": "completed",
+            "assignee": "王五"
+        },
+        {
+            "id": "review_by_tech_lead",
+            "name": "技术负责人审核",
+            "type": "userTask",
+            "status": "active",
+            "assignee": "张三"
+        },
+        {
+            "id": "review_by_dept",
+            "name": "部门负责人审批",
+            "type": "userTask",
+            "status": "pending"
+        },
+        {
+            "id": "end",
+            "name": "结束",
+            "type": "end",
+            "status": "pending"
+        }
+    ],
+    "approvalRecords": [
+        {
+            "id": "record-1",
+            "operator": {
+                "id": "user-005",
+                "name": "王五",
+                "department": "设计一所"
+            },
+            "action": "submit",
+            "timestamp": "2024-12-24T09:30:00",
+            "nodeName": "提交申请",
+            "comment": "请各位领导审批",
+            "duration": 0
+        },
+        {
+            "id": "record-2",
+            "operator": {
+                "id": "user-001",
+                "name": "张三",
+                "department": "技术部"
+            },
+            "action": "pending",
+            "timestamp": "2024-12-24T10:00:00",
+            "nodeName": "技术负责人审核",
+            "isCurrent": true
+        }
+    ],
+    "userOptions": [
+        {
+            "id": "user-002",
+            "name": "李四",
+            "department": "技术部"
+        },
+        {
+            "id": "user-003",
+            "name": "赵六",
+            "department": "质量部"
+        },
+        {
+            "id": "user-004",
+            "name": "钱七",
+            "department": "总工办"
+        }
+    ],
+    "nodeOptions": [
+        {
+            "id": "submit",
+            "name": "提交申请"
+        }
+    ]
+}

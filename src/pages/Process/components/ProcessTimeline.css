@@ -1,0 +1,177 @@
+/**
+ * ProcessTimeline 样式
+ */
+
+.process-timeline {
+    padding: 8px 0;
+}
+
+/* 时间线圆点 */
+.timeline-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: white;
+}
+
+.timeline-dot-green {
+    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+    box-shadow: 0 2px 8px rgba(82, 196, 26, 0.4);
+}
+
+.timeline-dot-red {
+    background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+    box-shadow: 0 2px 8px rgba(255, 77, 79, 0.4);
+}
+
+.timeline-dot-blue {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.4);
+}
+
+.timeline-dot-orange {
+    background: linear-gradient(135deg, #fa8c16 0%, #d46b08 100%);
+    box-shadow: 0 2px 8px rgba(250, 140, 22, 0.4);
+}
+
+.timeline-dot-gray {
+    background: linear-gradient(135deg, #8c8c8c 0%, #595959 100%);
+    box-shadow: 0 2px 8px rgba(140, 140, 140, 0.4);
+}
+
+/* 当前节点动画 */
+.timeline-dot-current {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #faad14 0%, #d48806 100%);
+    box-shadow: 0 0 0 4px rgba(250, 173, 20, 0.2);
+    animation: pulse-ring 2s infinite;
+    font-size: 14px;
+    color: white;
+}
+
+@keyframes pulse-ring {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(250, 173, 20, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(250, 173, 20, 0.1);
+    }
+}
+
+.timeline-dot-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #8c8c8c;
+}
+
+/* 时间线项目 */
+.timeline-item {
+    padding: 8px 16px;
+    margin-left: -8px;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+}
+
+.timeline-item:hover {
+    background: #f8fafc;
+}
+
+.timeline-item.current {
+    background: linear-gradient(135deg, rgba(250, 173, 20, 0.05) 0%, rgba(250, 173, 20, 0.1) 100%);
+    border: 1px solid rgba(250, 173, 20, 0.2);
+}
+
+/* 头部布局 */
+.timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.timeline-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timeline-user-name {
+    font-size: 14px;
+}
+
+.timeline-user-dept {
+    font-size: 12px;
+}
+
+.timeline-action-tag {
+    font-weight: 500;
+}
+
+/* 节点名称 */
+.timeline-node {
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+/* 审批意见 */
+.timeline-comment {
+    margin: 12px 0 !important;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-left: 3px solid #1890ff;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #475569;
+    font-size: 13px;
+}
+
+/* 底部信息 */
+.timeline-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+}
+
+.timeline-time {
+    color: #8c8c8c;
+}
+
+.timeline-duration {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #8c8c8c;
+}
+
+/* AntD Timeline 覆盖 */
+.process-timeline .ant-timeline-item {
+    padding-bottom: 24px;
+}
+
+.process-timeline .ant-timeline-item-tail {
+    border-left-width: 2px;
+    border-left-style: dashed;
+}
+
+.process-timeline .ant-timeline-item-head {
+    background: transparent;
+}

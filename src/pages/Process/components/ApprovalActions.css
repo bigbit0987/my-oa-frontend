@@ -1,0 +1,136 @@
+/**
+ * ApprovalActions 样式
+ */
+
+.approval-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.approval-actions.sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.actions-left,
+.actions-right {
+    display: flex;
+    gap: 12px;
+}
+
+/* 按钮样式 */
+.action-btn {
+    min-width: 88px;
+    height: 40px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.action-btn.approve {
+    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+    border-color: #52c41a;
+    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3);
+}
+
+.action-btn.approve:hover {
+    background: linear-gradient(135deg, #73d13d 0%, #52c41a 100%);
+    box-shadow: 0 6px 16px rgba(82, 196, 26, 0.4);
+}
+
+.action-btn.reject {
+    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+}
+
+.action-btn.reject:hover {
+    box-shadow: 0 6px 16px rgba(255, 77, 79, 0.3);
+}
+
+/* 常用意见模板标签 */
+.template-tag {
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+.template-tag:hover {
+    background: #1890ff;
+    border-color: #1890ff;
+    color: white;
+}
+
+/* 用户部门 */
+.user-dept {
+    color: #8c8c8c;
+    font-size: 12px;
+}
+
+/* 驳回节点选择 */
+.reject-node-group {
+    width: 100%;
+}
+
+.reject-node-group .ant-radio-wrapper {
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.reject-node-group .ant-radio-wrapper:hover {
+    background: #f8fafc;
+}
+
+/* 弹窗优化 */
+.ant-modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.ant-modal-header {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 24px;
+}
+
+.ant-modal-title {
+    font-weight: 600;
+}
+
+.ant-modal-body {
+    padding: 24px;
+}
+
+.ant-modal-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 12px 24px;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    .approval-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .actions-left,
+    .actions-right {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-btn {
+        flex: 1;
+    }
+}

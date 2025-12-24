@@ -1,0 +1,92 @@
+/**
+ * FormilyRenderer 样式
+ */
+
+.formily-renderer {
+    padding: 16px 0;
+}
+
+.formily-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+/* 表单布局优化 */
+.formily-renderer .ant-formily-item {
+    margin-bottom: 20px;
+}
+
+.formily-renderer .ant-formily-item-label {
+    font-weight: 500;
+    color: #1a202c;
+}
+
+/* 只读模式样式 */
+.formily-renderer .ant-formily-text {
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+/* 表格组件样式 */
+.formily-renderer .ant-formily-array-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.formily-renderer .ant-formily-array-table .ant-table-thead th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+
+/* 卡片组件样式 */
+.formily-renderer .ant-formily-array-cards {
+    gap: 16px;
+}
+
+.formily-renderer .ant-formily-array-cards-item {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Tab 组件样式 */
+.formily-renderer .ant-formily-form-tab .ant-tabs-nav {
+    margin-bottom: 24px;
+}
+
+/* 折叠面板样式 */
+.formily-renderer .ant-formily-form-collapse .ant-collapse-header {
+    font-weight: 500;
+}
+
+/* 按钮组样式 */
+.formily-renderer .ant-formily-form-button-group {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* 吸底按钮组 */
+.formily-renderer .ant-formily-form-button-group-sticky {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 16px 0;
+    margin: 0 -24px;
+    padding: 16px 24px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .formily-renderer .ant-formily-item-label {
+        text-align: left;
+    }
+}

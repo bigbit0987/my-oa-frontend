@@ -1,0 +1,16 @@
+/* src/index.css */
+@import "tailwindcss";
+/* 按照 ADR-006 指引，使用原生 @import 引入 */
+
+/* 基础设计变量与微调 */
+:root {
+  --color-primary: #1890ff;
+  /* 对应文档中的科技蓝 */
+}
+
+/* 全局样式微调 */
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

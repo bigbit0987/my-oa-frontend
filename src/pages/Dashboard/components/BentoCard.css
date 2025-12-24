@@ -1,0 +1,73 @@
+/**
+ * BentoCard 样式
+ * Bento Grid 响应式布局
+ */
+
+/* 基础卡片样式 */
+.bento-card {
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.08),
+    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* 尺寸定义 - 基于 CSS Grid */
+.bento-1x1 {
+  grid-column: span 1;
+  grid-row: span 1;
+  min-height: 180px;
+}
+
+.bento-2x1 {
+  grid-column: span 2;
+  grid-row: span 1;
+  min-height: 180px;
+}
+
+.bento-1x2 {
+  grid-column: span 1;
+  grid-row: span 2;
+  min-height: 380px;
+}
+
+.bento-2x2 {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 380px;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .bento-2x1,
+  .bento-1x2,
+  .bento-2x2 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+/* AntD Card 覆盖 */
+.bento-card .ant-card-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 16px 20px 12px;
+}
+
+.bento-card .ant-card-head-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.bento-card .ant-card-body {
+  padding: 16px 20px 20px;
+}

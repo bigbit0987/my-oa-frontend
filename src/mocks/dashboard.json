@@ -1,0 +1,108 @@
+{
+    "kpi": {
+        "todoCount": 12,
+        "projectCount": 8,
+        "completedThisMonth": 24,
+        "overdueTasks": 2
+    },
+    "urgentList": [
+        {
+            "id": "1",
+            "title": "项目A设计输入评审",
+            "type": "流程审批",
+            "deadline": "2024-12-25",
+            "priority": "high",
+            "status": "pending"
+        },
+        {
+            "id": "2",
+            "title": "项目B采购合同审批",
+            "type": "流程审批",
+            "deadline": "2024-12-26",
+            "priority": "high",
+            "status": "pending"
+        },
+        {
+            "id": "3",
+            "title": "项目C变更申请",
+            "type": "流程审批",
+            "deadline": "2024-12-27",
+            "priority": "medium",
+            "status": "pending"
+        },
+        {
+            "id": "4",
+            "title": "季度报告提交",
+            "type": "定期任务",
+            "deadline": "2024-12-28",
+            "priority": "medium",
+            "status": "pending"
+        },
+        {
+            "id": "5",
+            "title": "项目D正式成果审定",
+            "type": "流程审批",
+            "deadline": "2024-12-30",
+            "priority": "low",
+            "status": "pending"
+        }
+    ],
+    "quickAccess": [
+        {
+            "key": "initiate",
+            "label": "发起流程",
+            "icon": "PlusCircleOutlined",
+            "path": "/process/initiate"
+        },
+        {
+            "key": "todo",
+            "label": "待办任务",
+            "icon": "CheckSquareOutlined",
+            "path": "/process/todo"
+        },
+        {
+            "key": "project",
+            "label": "项目台账",
+            "icon": "ProjectOutlined",
+            "path": "/project/list"
+        },
+        {
+            "key": "history",
+            "label": "已办历史",
+            "icon": "HistoryOutlined",
+            "path": "/process/history"
+        },
+        {
+            "key": "report",
+            "label": "统计报表",
+            "icon": "BarChartOutlined",
+            "path": "/report"
+        },
+        {
+            "key": "calendar",
+            "label": "日程安排",
+            "icon": "CalendarOutlined",
+            "path": "/calendar"
+        }
+    ],
+    "recentProjects": [
+        {
+            "id": "p1",
+            "name": "某城市综合管廊项目",
+            "stage": "设计阶段",
+            "progress": 45
+        },
+        {
+            "id": "p2",
+            "name": "某新区道路工程",
+            "stage": "施工阶段",
+            "progress": 72
+        },
+        {
+            "id": "p3",
+            "name": "某产业园基础设施",
+            "stage": "前期阶段",
+            "progress": 20
+        }
+    ]
+}

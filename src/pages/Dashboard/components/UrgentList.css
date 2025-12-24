@@ -1,0 +1,149 @@
+/**
+ * UrgentList 样式
+ */
+
+.urgent-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.urgent-list-container .ant-list {
+    flex: 1;
+}
+
+.urgent-item {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.urgent-item:last-child {
+    border-bottom: none !important;
+}
+
+.urgent-item:hover {
+    background: #fafafa;
+    margin: 0 -20px;
+    padding: 12px 20px !important;
+}
+
+.urgent-item.overdue {
+    background: linear-gradient(90deg, rgba(255, 77, 79, 0.05) 0%, transparent 100%);
+}
+
+.urgent-item.warning {
+    background: linear-gradient(90deg, rgba(250, 173, 20, 0.05) 0%, transparent 100%);
+}
+
+.urgent-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+.urgent-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.urgent-badge {
+    flex-shrink: 0;
+}
+
+.urgent-badge.pulse .ant-badge-status-dot {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+}
+
+.urgent-item-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.urgent-title {
+    font-size: 14px;
+    display: block;
+    max-width: 100%;
+}
+
+.urgent-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.urgent-type {
+    font-size: 12px;
+}
+
+.urgent-item-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.deadline-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #8c8c8c;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #f5f5f5;
+}
+
+.deadline-tag.overdue {
+    color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.1);
+    font-weight: 500;
+}
+
+.deadline-tag.warning {
+    color: #faad14;
+    background: rgba(250, 173, 20, 0.1);
+}
+
+.urgent-arrow {
+    color: #bfbfbf;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.urgent-item:hover .urgent-arrow {
+    transform: translateX(2px);
+    color: #1890ff;
+}
+
+.urgent-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    gap: 8px;
+    color: #bfbfbf;
+    font-size: 32px;
+}

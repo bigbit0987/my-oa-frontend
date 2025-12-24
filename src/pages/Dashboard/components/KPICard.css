@@ -1,0 +1,82 @@
+/**
+ * KPICard 样式
+ */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    height: 100%;
+}
+
+.kpi-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg,
+            color-mix(in srgb, var(--kpi-color) 5%, white) 0%,
+            color-mix(in srgb, var(--kpi-color) 10%, white) 100%);
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--kpi-color) 15%, transparent);
+    transition: all 0.3s ease;
+}
+
+.kpi-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--kpi-color) 20%, transparent);
+}
+
+.kpi-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--kpi-color) 0%, color-mix(in srgb, var(--kpi-color) 80%, black) 100%);
+    color: white;
+    font-size: 22px;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--kpi-color) 30%, transparent);
+}
+
+.kpi-content {
+    flex: 1;
+}
+
+.kpi-value {
+    margin: 0 !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    color: #1a202c;
+}
+
+.kpi-label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* 数字增长动画 */
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.kpi-value {
+    animation: countUp 0.5s ease-out;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}

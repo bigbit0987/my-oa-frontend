@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="project_archiving_process" name="项目归档申请流程" isExecutable="true">
+    <documentation>
+      归档评分阶段 - 项目归档申请（自动触发）
+      流程说明：项目负责人填写归档信息 -> 部门驻所副总/总助审批 -> 电子文件验收 -> 纸质文件验收
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_fill" />
+
+    <userTask id="task_pm_fill" name="项目负责人填写归档信息" flowable:assignee="${initiator}" flowable:formKey="project_archiving">
+      <documentation>项目负责人填写归档附件汇总、确认会议纪要</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_dept" sourceRef="task_pm_fill" targetRef="task_dept_leader_approve" />
+
+    <userTask id="task_dept_leader_approve" name="部门驻所副总/总助审批" flowable:candidateGroups="DEPT_LEADER" flowable:formKey="project_archiving">
+      <documentation>部门驻所副总或总助审批归档申请</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_dept_to_electronic" sourceRef="task_dept_leader_approve" targetRef="task_electronic_receive" />
+
+    <userTask id="task_electronic_receive" name="电子文件验收" flowable:candidateGroups="INFO_CENTER" flowable:formKey="project_archiving">
+      <documentation>信息中心进行电子文件验收</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_electronic_to_paper" sourceRef="task_electronic_receive" targetRef="task_paper_receive" />
+
+    <userTask id="task_paper_receive" name="纸质文件验收" flowable:candidateGroups="ARCHIVE_CENTER" flowable:formKey="project_archiving">
+      <documentation>档案中心进行纸质文件验收</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_paper_to_end" sourceRef="task_paper_receive" targetRef="endEvent" />
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_proj_arch">
+    <bpmndi:BPMNPlane id="BPMNPlane_proj_arch" bpmnElement="project_archiving_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="100" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_fill" bpmnElement="task_pm_fill">
+        <omgdc:Bounds x="180" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dept_leader_approve" bpmnElement="task_dept_leader_approve">
+        <omgdc:Bounds x="330" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_electronic_receive" bpmnElement="task_electronic_receive">
+        <omgdc:Bounds x="480" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_paper_receive" bpmnElement="task_paper_receive">
+        <omgdc:Bounds x="630" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="780" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

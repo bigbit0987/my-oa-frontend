@@ -1,0 +1,389 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12,
+    "labelAlign": "left",
+    "colon": false,
+    "style": {
+      "margin": "0px",
+      "padding": "10px 24px 10px 24px"
+    }
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "tableLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "x-component-props": {
+          "style": {
+            "padding": "10px",
+            "boxShadow": "2px 1px 5px 4px rgba(0, 0, 0, 0.1)",
+            "borderRadius": "6px"
+          }
+        },
+        "name": "tableLayout",
+        "x-designable-id": "announce_layout",
+        "x-index": 0,
+        "properties": {
+          "header": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "公告图流程",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center",
+                "fontFamily": "arial black,sans-serif",
+                "fontSize": "22px",
+                "margin": "10px 0",
+                "fontWeight": "bold"
+              }
+            },
+            "name": "header",
+            "x-designable-id": "announce_header",
+            "x-index": 0
+          },
+          "applicantInfoGrid": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "applicantInfoGrid",
+            "x-designable-id": "applicant_info_grid",
+            "x-index": 1,
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId",
+                "x-designable-id": "applicant_id_field",
+                "x-index": 0
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId",
+                "x-designable-id": "dept_id_field",
+                "x-index": 1
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime",
+                "x-designable-id": "apply_time_field",
+                "x-index": 2
+              }
+            }
+          },
+          "baseInfoCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "基本信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "paddingTop": "0px",
+                  "paddingBottom": "0px",
+                  "minHeight": "auto",
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px"
+                }
+              },
+              "style": {
+                "marginTop": "10px"
+              }
+            },
+            "name": "baseInfoCard",
+            "x-designable-id": "announce_base_info",
+            "x-index": 2,
+            "properties": {
+              "baseGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4,
+                  "columnGap": 10,
+                  "rowGap": 0
+                },
+                "name": "baseGrid",
+                "x-designable-id": "announce_base_grid",
+                "x-index": 0,
+                "x-validator": [],
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "title": "项目名称",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "labelCol": 2,
+                      "wrapperCol": 22,
+                      "gridSpan": 4
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "project"
+                    },
+                    "x-component-props": {
+                      "placeholder": "请选择项目",
+                      "showSearch": true,
+                      "filterOption": true,
+                      "optionFilterProp": "label"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择项目"
+                      }
+                    ],
+                    "name": "projectId",
+                    "x-designable-id": "announce_project_id",
+                    "x-index": 0,
+                    "x-reactions": [
+                      {
+                        "dependencies": [],
+                        "fulfill": {
+                          "run": "\n                            if (!$self.value) return;\n                            const projectId = $self.value;\n                            $form.$http.get('/api/v1/forms/data/project/' + projectId)\n                              .then(res => {\n                                const data = res.data || {};\n                                $form.setFieldState('projectNumber', state => { state.value = data.projectNumber || ''; });\n                                $form.setFieldState('projectManagerId', state => { state.value = data.projectManagerId ? String(data.projectManagerId) : ''; });\n                                $form.setFieldState('projectMembers', state => { state.value = data.projectMembers || []; });\n                                $form.setFieldState('responsibleDeptId', state => { state.value = data.responsibleDeptId ? String(data.responsibleDeptId) : ''; });\n                                $form.setFieldState('techReviewerId', state => { state.value = data.projectAuditorId ? String(data.projectAuditorId) : ''; });\n                              })\n                              .catch(err => { console.error('加载项目详情失败:', err); });\n                          "
+                        }
+                      }
+                    ]
+                  },
+                  "projectManagerId": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "projectManagerId",
+                    "x-designable-id": "announce_project_mgr",
+                    "x-index": 1
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "title": "公告图发起时间",
+                    "x-decorator": "FormItem",
+                    "x-component": "DatePicker",
+                    "x-component-props": {
+                      "format": "YYYY-MM-DD",
+                      "placeholder": "选择发起时间"
+                    },
+                    "name": "startTime",
+                    "x-designable-id": "announce_start_time",
+                    "x-index": 2,
+                    "x-validator": [],
+                    "x-decorator-props": {}
+                  },
+                  "projectMembers": {
+                    "type": "array",
+                    "title": "项目组成员",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-component-props": {
+                      "mode": "multiple"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "projectMembers",
+                    "x-designable-id": "announce_members",
+                    "x-index": 3
+                  },
+                  "responsibleDeptId": {
+                    "type": "string",
+                    "title": "承担部门",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "dept"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "responsibleDeptId",
+                    "x-designable-id": "announce_resp_dept",
+                    "x-index": 4,
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {}
+                  },
+                  "bwhkegeinso": {
+                    "type": "void",
+                    "x-component": "FormGrid.GridColumn",
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-designable-id": "bwhkegeinso",
+                    "properties": {
+                      "projectNumber": {
+                        "type": "string",
+                        "title": "项目编号(设计号)",
+                        "x-decorator": "FormItem",
+                        "x-component": "Input",
+                        "x-pattern": "readPretty",
+                        "name": "projectNumber",
+                        "x-designable-id": "announce_project_num",
+                        "x-index": 0,
+                        "x-validator": [],
+                        "x-component-props": {},
+                        "x-decorator-props": {}
+                      }
+                    },
+                    "x-index": 5
+                  },
+                  "paperSubmit": {
+                    "type": "string",
+                    "title": "是否提交纸质文件给委托方",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "default": "no",
+                    "name": "paperSubmit",
+                    "x-designable-id": "announce_paper_submit",
+                    "x-index": 6,
+                    "x-validator": [],
+                    "x-decorator-props": {}
+                  },
+                  "lblmfvk6gha": {
+                    "type": "void",
+                    "x-component": "FormGrid.GridColumn",
+                    "x-designable-id": "lblmfvk6gha",
+                    "properties": {
+                      "receiveTime": {
+                        "type": "string",
+                        "title": "公告图接收时间",
+                        "x-decorator": "FormItem",
+                        "x-component": "DatePicker",
+                        "x-component-props": {
+                          "format": "YYYY-MM-DD",
+                          "placeholder": "选择接收时间"
+                        },
+                        "name": "receiveTime",
+                        "x-designable-id": "announce_receive_time",
+                        "x-index": 0,
+                        "x-validator": [],
+                        "x-decorator-props": {}
+                      }
+                    },
+                    "x-index": 7
+                  },
+                  "6lin2ectx0x": {
+                    "type": "void",
+                    "x-component": "FormGrid.GridColumn",
+                    "x-designable-id": "6lin2ectx0x",
+                    "properties": {
+                      "techReviewerId": {
+                        "type": "string",
+                        "title": "技术办审核人",
+                        "x-decorator": "FormItem",
+                        "x-component": "Select",
+                        "x-dynamic-data": {
+                          "type": "user"
+                        },
+                        "x-component-props": {
+                          "placeholder": "选择审核人",
+                          "showSearch": true
+                        },
+                        "name": "techReviewerId",
+                        "x-designable-id": "announce_tech_reviewer",
+                        "x-index": 0,
+                        "x-validator": [],
+                        "x-decorator-props": {}
+                      }
+                    },
+                    "x-index": 8
+                  },
+                  "98zdkino5df": {
+                    "type": "void",
+                    "x-component": "FormGrid.GridColumn",
+                    "x-designable-id": "98zdkino5df",
+                    "properties": {
+                      "attachments": {
+                        "type": "array",
+                        "title": "附件",
+                        "x-decorator": "FormItem",
+                        "x-decorator-props": {
+                          "labelCol": 2,
+                          "wrapperCol": 22
+                        },
+                        "x-component": "Upload",
+                        "x-component-props": {
+                          "textContent": "上传附件"
+                        },
+                        "name": "attachments",
+                        "x-designable-id": "announce_attachments",
+                        "x-index": 0,
+                        "x-validator": []
+                      }
+                    },
+                    "x-index": 9
+                  }
+                }
+              },
+              "warningText": {
+                "type": "void",
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "colon": false
+                },
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "说明：这里关联的是送审技术办审核人，若有改变请修改为其他人！",
+                  "style": {
+                    "color": "red",
+                    "fontSize": "12px"
+                  }
+                },
+                "name": "warningText",
+                "x-designable-id": "announce_warning",
+                "x-index": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "8rnoil363wx"
+  }
+}

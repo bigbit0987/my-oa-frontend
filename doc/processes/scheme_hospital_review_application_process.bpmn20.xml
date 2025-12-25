@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="scheme_hospital_review_application_process" name="方案院审会申请单流程" isExecutable="true">
+    <documentation>
+      方案审查阶段 - 院审会申请单（手动发起）
+      流程说明：项目负责人选择上院审时间并上传附件 -> 技术办助理审批确认时间
+      注意：一周内未安排时间则自动退回
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_apply" />
+
+    <userTask id="task_pm_apply" name="项目负责人申请" flowable:assignee="${initiator}" flowable:formKey="scheme_hospital_review_application">
+      <documentation>项目负责人选择期望院审时间、上传院审附件、填写创新/转化信息</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_tech" sourceRef="task_pm_apply" targetRef="task_tech_assistant_arrange" />
+
+    <userTask id="task_tech_assistant_arrange" name="技术办助理安排时间" flowable:candidateGroups="TECH_OFFICE" flowable:formKey="scheme_hospital_review_application">
+      <documentation>技术办助理审批并安排正式院审时间，一周内需完成</documentation>
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.flowable.engine.impl.bpmn.listener.DueDateTaskListener">
+          <flowable:field name="dueDate"><flowable:string>P7D</flowable:string></flowable:field>
+        </flowable:taskListener>
+      </extensionElements>
+    </userTask>
+
+    <sequenceFlow id="flow_tech_to_gateway" sourceRef="task_tech_assistant_arrange" targetRef="gateway_arrange_result" />
+
+    <exclusiveGateway id="gateway_arrange_result" name="安排结果" />
+
+    <sequenceFlow id="flow_arrange_approved" name="已安排" sourceRef="gateway_arrange_result" targetRef="endEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('arrangeResult', 'approved') == 'approved'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_arrange_rejected" name="退回重选" sourceRef="gateway_arrange_result" targetRef="task_pm_apply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('arrangeResult', 'approved') == 'rejected'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_scheme_hospital_app">
+    <bpmndi:BPMNPlane id="BPMNPlane_scheme_hospital_app" bpmnElement="scheme_hospital_review_application_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="150" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_apply" bpmnElement="task_pm_apply">
+        <omgdc:Bounds x="230" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tech_assistant_arrange" bpmnElement="task_tech_assistant_arrange">
+        <omgdc:Bounds x="380" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_gateway_arrange_result" bpmnElement="gateway_arrange_result" isMarkerVisible="true">
+        <omgdc:Bounds x="530" y="195" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="650" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

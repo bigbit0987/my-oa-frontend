@@ -1,0 +1,173 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "mainLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "name": "mainLayout",
+        "properties": {
+          "title": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "项目恢复运行申请",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center"
+              }
+            },
+            "name": "title"
+          },
+          "header": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "header",
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId"
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId"
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime"
+              }
+            }
+          },
+          "contentCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "申请变更内容",
+              "size": "small",
+              "headStyle": {
+                "backgroundColor": "rgb(159, 197, 232)",
+                "textAlign": "center"
+              }
+            },
+            "name": "contentCard",
+            "properties": {
+              "pName": {
+                "type": "string",
+                "title": "项目名称",
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "name": "pName"
+              },
+              "grid1": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2
+                },
+                "name": "grid1",
+                "properties": {
+                  "pNo": {
+                    "type": "string",
+                    "title": "项目编号",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "pNo"
+                  },
+                  "resp": {
+                    "type": "string",
+                    "title": "承担部门",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "respDept"
+                  },
+                  "pMan": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "pManager"
+                  },
+                  "status": {
+                    "type": "string",
+                    "title": "项目状态",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "status",
+                    "x-component-props": {
+                      "placeholder": "暂停/终止"
+                    }
+                  },
+                  "newStatus": {
+                    "type": "string",
+                    "title": "拟修改项目状态",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "newStatus",
+                    "x-component-props": {
+                      "defaultValue": "进行中",
+                      "readOnly": true
+                    }
+                  }
+                }
+              },
+              "reason": {
+                "type": "string",
+                "title": "申请恢复运行原因",
+                "x-decorator": "FormItem",
+                "x-component": "Input.TextArea",
+                "name": "reason",
+                "x-component-props": {
+                  "rows": 4
+                }
+              },
+              "attachment": {
+                "type": "array",
+                "title": "相关附件",
+                "x-decorator": "FormItem",
+                "x-component": "Upload",
+                "name": "attachment"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

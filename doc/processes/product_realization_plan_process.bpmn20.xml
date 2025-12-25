@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.company.com/workflow" exporter="Camunda Modeler" exporterVersion="5.41.0">
+  <process id="product_realization_plan_process" name="产品实现策划流程" isExecutable="true">
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_planning" />
+    <userTask id="task_pm_planning" name="项目负责人填写" flowable:assignee="${initiator}" flowable:formKey="product_realization_plan">
+      <documentation>项目负责人上传相关附件并填写相关说明</documentation>
+      <extensionElements />
+    </userTask>
+    <sequenceFlow id="flow_pm_to_gateway" sourceRef="task_pm_planning" targetRef="gateway_check_supervisor" />
+    <exclusiveGateway id="gateway_check_supervisor" name="判断项目主管是否为空" />
+    <sequenceFlow id="flow_has_supervisor" name="有项目主管" sourceRef="gateway_check_supervisor" targetRef="task_supervisor_guidance">
+      <conditionExpression xsi:type="tFormalExpression">${vars:getOrDefault('projectSupervisorId', '') != ''}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_no_supervisor" name="无项目主管" sourceRef="gateway_check_supervisor" targetRef="task_dept_admin_guidance">
+      <conditionExpression xsi:type="tFormalExpression">${vars:getOrDefault('projectSupervisorId', '') == ''}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="task_supervisor_guidance" name="项目主管指导" flowable:assignee="${projectSupervisorId}" flowable:formKey="product_realization_plan">
+      <documentation>项目主管填写事前指导意见</documentation>
+    </userTask>
+    <sequenceFlow id="flow_supervisor_to_end" sourceRef="task_supervisor_guidance" targetRef="endEvent" />
+    <userTask id="task_dept_admin_guidance" name="承担部门管理员指导" flowable:candidateGroups="DEPT_ADMIN" flowable:formKey="product_realization_plan">
+      <documentation>无项目主管时，由部门管理员填写事前指导意见</documentation>
+    </userTask>
+    <sequenceFlow id="flow_admin_to_end" sourceRef="task_dept_admin_guidance" targetRef="endEvent" />
+    <endEvent id="endEvent" name="结束" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_product_realization">
+    <bpmndi:BPMNPlane id="BPMNPlane_product_realization" bpmnElement="product_realization_plan_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="150" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_planning" bpmnElement="task_pm_planning">
+        <omgdc:Bounds x="230" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_gateway_check_supervisor" bpmnElement="gateway_check_supervisor" isMarkerVisible="true">
+        <omgdc:Bounds x="380" y="195" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="360" y="240" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_supervisor_guidance" bpmnElement="task_supervisor_guidance">
+        <omgdc:Bounds x="500" y="100" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dept_admin_guidance" bpmnElement="task_dept_admin_guidance">
+        <omgdc:Bounds x="500" y="280" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="700" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_start_to_pm" bpmnElement="flow_start_to_pm">
+        <omgdi:waypoint x="180" y="215" />
+        <omgdi:waypoint x="230" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_pm_to_gateway" bpmnElement="flow_pm_to_gateway">
+        <omgdi:waypoint x="330" y="215" />
+        <omgdi:waypoint x="380" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_has_supervisor" bpmnElement="flow_has_supervisor">
+        <omgdi:waypoint x="400" y="195" />
+        <omgdi:waypoint x="400" y="130" />
+        <omgdi:waypoint x="500" y="130" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="412" y="113" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_no_supervisor" bpmnElement="flow_no_supervisor">
+        <omgdi:waypoint x="400" y="235" />
+        <omgdi:waypoint x="400" y="310" />
+        <omgdi:waypoint x="500" y="310" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="412" y="323" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_supervisor_to_end" bpmnElement="flow_supervisor_to_end">
+        <omgdi:waypoint x="600" y="130" />
+        <omgdi:waypoint x="714" y="130" />
+        <omgdi:waypoint x="714" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_admin_to_end" bpmnElement="flow_admin_to_end">
+        <omgdi:waypoint x="600" y="310" />
+        <omgdi:waypoint x="714" y="310" />
+        <omgdi:waypoint x="714" y="228" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

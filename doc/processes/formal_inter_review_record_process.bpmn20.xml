@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="formal_inter_review_record_process" name="正式成果所内审核流程" isExecutable="true">
+    <documentation>
+      正式成果阶段 - 所内审核（与送审成果所内审核流程类似）
+      V类项目不走此流程，IV类可选择跳过部分环节
+      流程说明：项目负责人 -> (四个并行分支：规划校对/工程校对/负责人/所级审核) -> 修改人修改 -> 各分支验证
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_initiate" />
+
+    <userTask id="task_pm_initiate" name="项目负责人发起" flowable:assignee="${initiator}" flowable:formKey="formal_inter_review_record">
+      <documentation>项目负责人选择所级审核人、修改人，核对项目信息，IV类可选择跳过部分阶段</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_gateway_skip" sourceRef="task_pm_initiate" targetRef="gateway_skip_check" />
+
+    <exclusiveGateway id="gateway_skip_check" name="是否跳过整个流程?" />
+
+    <sequenceFlow id="flow_skip_all" name="跳过(IV类)" sourceRef="gateway_skip_check" targetRef="task_dept_approve_skip">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('skipAllReview', 'no') == 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_not_skip" name="正常审核" sourceRef="gateway_skip_check" targetRef="parallel_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('skipAllReview', 'no') != 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="task_dept_approve_skip" name="部门主管审批跳过" flowable:candidateGroups="DEPT_ADMIN" flowable:formKey="formal_inter_review_record">
+      <documentation>部门主管审批是否可以跳过正式所内审核流程</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_skip_to_end" sourceRef="task_dept_approve_skip" targetRef="endEvent" />
+
+    <!-- 四分支并行审核 -->
+    <parallelGateway id="parallel_start" name="并行开始" />
+
+    <sequenceFlow id="flow_to_planning" sourceRef="parallel_start" targetRef="task_planning_proofread" />
+    <sequenceFlow id="flow_to_engineering" sourceRef="parallel_start" targetRef="task_engineering_proofread" />
+    <sequenceFlow id="flow_to_pm_opinion" sourceRef="parallel_start" targetRef="task_pm_opinion" />
+    <sequenceFlow id="flow_to_institute" sourceRef="parallel_start" targetRef="task_institute_review" />
+
+    <userTask id="task_planning_proofread" name="规划校对意见" flowable:assignee="${planningProofreaderId}" flowable:formKey="formal_inter_review_record">
+      <documentation>规划校对人填写校对意见</documentation>
+    </userTask>
+
+    <userTask id="task_engineering_proofread" name="工程校对意见" flowable:assignee="${engineeringProofreaderId}" flowable:formKey="formal_inter_review_record">
+      <documentation>工程校对人填写校对意见</documentation>
+    </userTask>
+
+    <userTask id="task_pm_opinion" name="项目负责人意见" flowable:assignee="${initiator}" flowable:formKey="formal_inter_review_record">
+      <documentation>项目负责人填写审核意见</documentation>
+    </userTask>
+
+    <userTask id="task_institute_review" name="所级审核意见" flowable:assignee="${instituteReviewerId}" flowable:formKey="formal_inter_review_record">
+      <documentation>所级审核人填写审核意见</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_planning_to_join" sourceRef="task_planning_proofread" targetRef="parallel_join" />
+    <sequenceFlow id="flow_engineering_to_join" sourceRef="task_engineering_proofread" targetRef="parallel_join" />
+    <sequenceFlow id="flow_pm_to_join" sourceRef="task_pm_opinion" targetRef="parallel_join" />
+    <sequenceFlow id="flow_institute_to_join" sourceRef="task_institute_review" targetRef="parallel_join" />
+
+    <parallelGateway id="parallel_join" name="并行汇合" />
+
+    <sequenceFlow id="flow_join_to_modifier" sourceRef="parallel_join" targetRef="task_modifier_revise" />
+
+    <userTask id="task_modifier_revise" name="修改人修改成果" flowable:assignee="${modifierId}" flowable:formKey="formal_inter_review_record">
+      <documentation>修改人查看所有意见，按意见修改成果并填写修改记录</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_modifier_to_verify_parallel" sourceRef="task_modifier_revise" targetRef="parallel_verify_start" />
+
+    <!-- 四分支并行验证 -->
+    <parallelGateway id="parallel_verify_start" name="并行验证开始" />
+
+    <sequenceFlow id="flow_to_verify_planning" sourceRef="parallel_verify_start" targetRef="task_verify_planning" />
+    <sequenceFlow id="flow_to_verify_engineering" sourceRef="parallel_verify_start" targetRef="task_verify_engineering" />
+    <sequenceFlow id="flow_to_verify_pm" sourceRef="parallel_verify_start" targetRef="task_verify_pm" />
+    <sequenceFlow id="flow_to_verify_institute" sourceRef="parallel_verify_start" targetRef="task_verify_institute" />
+
+    <userTask id="task_verify_planning" name="规划校对验证" flowable:assignee="${planningProofreaderId}" flowable:formKey="formal_inter_review_record">
+      <documentation>规划校对人验证是否已按意见修改</documentation>
+    </userTask>
+
+    <userTask id="task_verify_engineering" name="工程校对验证" flowable:assignee="${engineeringProofreaderId}" flowable:formKey="formal_inter_review_record">
+      <documentation>工程校对人验证是否已按意见修改</documentation>
+    </userTask>
+
+    <userTask id="task_verify_pm" name="项目负责人验证" flowable:assignee="${initiator}" flowable:formKey="formal_inter_review_record">
+      <documentation>项目负责人验证是否已按意见修改</documentation>
+    </userTask>
+
+    <userTask id="task_verify_institute" name="所级审核验证" flowable:assignee="${instituteReviewerId}" flowable:formKey="formal_inter_review_record">
+      <documentation>所级审核人验证是否已按意见修改</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_verify_planning_to_join" sourceRef="task_verify_planning" targetRef="parallel_verify_join" />
+    <sequenceFlow id="flow_verify_engineering_to_join" sourceRef="task_verify_engineering" targetRef="parallel_verify_join" />
+    <sequenceFlow id="flow_verify_pm_to_join" sourceRef="task_verify_pm" targetRef="parallel_verify_join" />
+    <sequenceFlow id="flow_verify_institute_to_join" sourceRef="task_verify_institute" targetRef="parallel_verify_join" />
+
+    <parallelGateway id="parallel_verify_join" name="并行验证汇合" />
+
+    <sequenceFlow id="flow_verify_join_to_end" sourceRef="parallel_verify_join" targetRef="endEvent" />
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_formal_inter">
+    <bpmndi:BPMNPlane id="BPMNPlane_formal_inter" bpmnElement="formal_inter_review_record_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="100" y="300" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_initiate" bpmnElement="task_pm_initiate">
+        <omgdc:Bounds x="180" y="285" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="1400" y="300" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

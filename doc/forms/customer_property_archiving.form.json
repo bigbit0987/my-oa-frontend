@@ -1,0 +1,614 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12,
+    "labelAlign": "left",
+    "colon": false
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "tableLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "x-component-props": {
+          "style": {
+            "padding": "10px",
+            "boxShadow": "2px 1px 5px 4px rgba(0, 0, 0, 0.1)",
+            "borderRadius": "6px"
+          }
+        },
+        "name": "tableLayout",
+        "x-designable-id": "root_layout",
+        "x-index": 0,
+        "properties": {
+          "header": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "顾客财产归档",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center",
+                "fontFamily": "arial black",
+                "fontSize": "24px",
+                "marginBottom": "20px"
+              }
+            },
+            "name": "header",
+            "x-designable-id": "header_text",
+            "x-index": 0
+          },
+          "topInfo": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3
+            },
+            "name": "topInfo",
+            "x-designable-id": "top_info",
+            "x-index": 1,
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请归档人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请归档人",
+                  "showSearch": true,
+                  "filterOption": true,
+                  "optionFilterProp": "label"
+                },
+                "name": "applicantId",
+                "x-designable-id": "field_applicant",
+                "x-index": 0
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true,
+                  "filterOption": true,
+                  "optionFilterProp": "label"
+                },
+                "name": "deptId",
+                "x-designable-id": "field_dept",
+                "x-index": 1
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请归档时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "showTime": true
+                },
+                "name": "applyTime",
+                "x-designable-id": "field_time",
+                "x-index": 2
+              }
+            }
+          },
+          "projectInfoCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "归档项目信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            "name": "projectInfoCard",
+            "x-designable-id": "project_info_card",
+            "x-index": 2,
+            "properties": {
+              "grid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4,
+                  "columnGap": 10
+                },
+                "name": "grid",
+                "x-designable-id": "project_grid",
+                "x-index": 0,
+                "x-validator": [],
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "title": "项目名称",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 4
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "project"
+                    },
+                    "x-component-props": {
+                      "placeholder": "请选择项目",
+                      "showSearch": true,
+                      "filterOption": true,
+                      "optionFilterProp": "label"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择项目"
+                      }
+                    ],
+                    "name": "projectId",
+                    "x-designable-id": "proj_id",
+                    "x-index": 0,
+                    "x-reactions": [
+                      {
+                        "dependencies": [],
+                        "fulfill": {
+                          "run": "\n                if (!$self.value) return;\n                const projectId = $self.value;\n                $form.$http.get('/api/v1/forms/data/project/' + projectId)\n                  .then(res => {\n                    const data = res.data || {};\n                    $form.setFieldState('projectNumber', state => { state.value = data.projectNumber || ''; });\n                    $form.setFieldState('registerDate', state => { state.value = data.registerDate || ''; });\n                    $form.setFieldState('archiveFinishTime', state => { state.value = data.archiveFinishTime || ''; });\n                    $form.setFieldState('projectManagerId', state => { state.value = data.projectManagerId ? String(data.projectManagerId) : ''; });\n                    $form.setFieldState('projectTypeKey', state => { state.value = data.projectTypeKey || ''; });\n                    $form.setFieldState('regionalStructureKey', state => { state.value = data.regionalStructureKey || ''; });\n                    $form.setFieldState('controlLevelKey', state => { state.value = data.controlLevelKey || ''; });\n                    $form.setFieldState('firstReviewScore', state => { state.value = data.firstReviewScore || ''; });\n                    $form.setFieldState('secondReviewScore', state => { state.value = data.secondReviewScore || ''; });\n                  })\n                  .catch(err => { console.error('加载项目详情失败:', err); });\n              "
+                        }
+                      }
+                    ]
+                  },
+                  "projectNumber": {
+                    "type": "string",
+                    "title": "项目编号",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "projectNumber",
+                    "x-designable-id": "proj_num",
+                    "x-index": 1,
+                    "x-validator": [],
+                    "x-component-props": {}
+                  },
+                  "registerDate": {
+                    "type": "string",
+                    "title": "项目登记日期",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "DatePicker",
+                    "x-pattern": "readPretty",
+                    "name": "registerDate",
+                    "x-designable-id": "reg_date",
+                    "x-index": 2
+                  },
+                  "archiveFinishTime": {
+                    "type": "string",
+                    "title": "归档完成时间",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "DatePicker",
+                    "x-pattern": "readPretty",
+                    "name": "archiveFinishTime",
+                    "x-designable-id": "finish_time",
+                    "x-index": 3
+                  },
+                  "projectManagerId": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "projectManagerId",
+                    "x-designable-id": "proj_mgr",
+                    "x-index": 4
+                  },
+                  "projectTypeKey": {
+                    "type": "string",
+                    "title": "项目类型",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "project_type"
+                    },
+                    "name": "projectTypeKey",
+                    "x-designable-id": "proj_type",
+                    "x-index": 5
+                  },
+                  "regionalStructureKey": {
+                    "type": "string",
+                    "title": "区域结构",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "regional_structure"
+                    },
+                    "name": "regionalStructureKey",
+                    "x-designable-id": "region",
+                    "x-index": 6
+                  },
+                  "controlLevelKey": {
+                    "type": "string",
+                    "title": "流程管控强度",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "control_level"
+                    },
+                    "name": "controlLevelKey",
+                    "x-designable-id": "control",
+                    "x-index": 7
+                  },
+                  "firstReviewScore": {
+                    "type": "number",
+                    "title": "一次院审得分",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "firstReviewScore",
+                    "x-designable-id": "score1",
+                    "x-index": 8
+                  },
+                  "secondReviewScore": {
+                    "type": "number",
+                    "title": "二次院审得分",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "secondReviewScore",
+                    "x-designable-id": "score2",
+                    "x-index": 9
+                  }
+                }
+              }
+            }
+          },
+          "descCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "size": "small"
+            },
+            "name": "descCard",
+            "x-designable-id": "desc_card",
+            "x-index": 3,
+            "properties": {
+              "description": {
+                "type": "void",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "说明：<br>顾客财产：除国家、地方技术标准、规范外，所有国土空间规划（城乡规划、土地规划）和工程咨询过程中所获得的顾客、联合设计中的合作方等提供的设计依据性文件、技术文件、资料、电子数据、相关实物模型以及其他设计所必需的财产。<br>需归档的顾客财产主要为以下内容：<br>a) 顾客提供的设计依据文件和资料，如：国土空间规划（城乡规划、土地规划）和工程咨询必要的相关资料、纪要、批复文件、规划建筑红线图、坐标图、地形图、地质勘探资料等专业文件以及电子数据。<br>b) 联合设计中合作方提供的设计依据性文件、合作方的设计文件等须保留、保存的用于可记追溯的技术资料。",
+                  "style": {
+                    "color": "red",
+                    "fontSize": "12px",
+                    "fontWeight": "bold"
+                  }
+                },
+                "name": "description",
+                "x-designable-id": "desc_text",
+                "x-index": 0
+              }
+            }
+          },
+          "propertyListCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "有无顾客财产",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            "name": "propertyListCard",
+            "x-designable-id": "property_card",
+            "x-index": 4,
+            "properties": {
+              "propertyList": {
+                "type": "array",
+                "x-component": "ArrayTable",
+                "x-component-props": {
+                  "bordered": true,
+                  "pagination": false
+                },
+                "name": "propertyList",
+                "x-designable-id": "property_table",
+                "x-index": 0,
+                "items": {
+                  "type": "object",
+                  "x-designable-id": "property_items",
+                  "properties": {
+                    "index": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "序号",
+                        "width": 60,
+                        "align": "center"
+                      },
+                      "name": "index",
+                      "x-designable-id": "col_index",
+                      "x-index": 0,
+                      "properties": {
+                        "idx": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Index",
+                          "x-designable-id": "idx",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "content": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "顾客财产内容"
+                      },
+                      "name": "content",
+                      "x-designable-id": "col_content",
+                      "x-index": 1,
+                      "properties": {
+                        "content": {
+                          "type": "string",
+                          "x-component": "Input",
+                          "x-decorator": "FormItem",
+                          "name": "content",
+                          "x-designable-id": "field_content",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "eNum": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "电子数量",
+                        "width": 100
+                      },
+                      "name": "eNum",
+                      "x-designable-id": "col_enum",
+                      "x-index": 2,
+                      "properties": {
+                        "eNum": {
+                          "type": "number",
+                          "x-component": "NumberPicker",
+                          "x-decorator": "FormItem",
+                          "name": "eNum",
+                          "x-designable-id": "field_enum",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "pNum": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "纸质数量",
+                        "width": 100
+                      },
+                      "name": "pNum",
+                      "x-designable-id": "col_pnum",
+                      "x-index": 3,
+                      "properties": {
+                        "pNum": {
+                          "type": "number",
+                          "x-component": "NumberPicker",
+                          "x-decorator": "FormItem",
+                          "name": "pNum",
+                          "x-designable-id": "field_pnum",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "file": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "附件上传"
+                      },
+                      "name": "file",
+                      "x-designable-id": "col_file",
+                      "x-index": 4,
+                      "properties": {
+                        "file": {
+                          "type": "array",
+                          "x-component": "Upload",
+                          "x-decorator": "FormItem",
+                          "name": "file",
+                          "x-designable-id": "field_file",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "remark": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "备注"
+                      },
+                      "name": "remark",
+                      "x-designable-id": "col_remark",
+                      "x-index": 5,
+                      "properties": {
+                        "remark": {
+                          "type": "string",
+                          "x-component": "Input",
+                          "x-decorator": "FormItem",
+                          "name": "remark",
+                          "x-designable-id": "field_remark",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "operation": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "操作",
+                        "width": 80
+                      },
+                      "name": "operation",
+                      "x-designable-id": "col_operation",
+                      "x-index": 6,
+                      "properties": {
+                        "del": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Remove",
+                          "name": "del",
+                          "x-designable-id": "btn_remove",
+                          "x-index": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "properties": {
+                  "add": {
+                    "type": "void",
+                    "x-component": "ArrayTable.Addition",
+                    "x-component-props": {
+                      "title": "添加顾客财产",
+                      "method": "push"
+                    },
+                    "name": "add",
+                    "x-designable-id": "btn_add",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "auditCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核确认",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            "name": "auditCard",
+            "x-designable-id": "audit_card",
+            "x-index": 5,
+            "properties": {
+              "grid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 1
+                },
+                "name": "grid",
+                "x-designable-id": "audit_grid",
+                "x-index": 0,
+                "properties": {
+                  "projMgrConfirm": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "rows": 2,
+                      "placeholder": "请输入审核意见"
+                    },
+                    "name": "projMgrConfirm",
+                    "x-designable-id": "field_proj_mgr",
+                    "x-index": 0
+                  },
+                  "deptLeaderConfirm": {
+                    "type": "string",
+                    "title": "部门驻所副总/总助",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "rows": 2,
+                      "placeholder": "请输入审核意见"
+                    },
+                    "name": "deptLeaderConfirm",
+                    "x-designable-id": "field_dept_leader",
+                    "x-index": 1
+                  },
+                  "prodOfficeConfirm": {
+                    "type": "string",
+                    "title": "生产经营室",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "rows": 2,
+                      "placeholder": "请输入审核意见"
+                    },
+                    "name": "prodOfficeConfirm",
+                    "x-designable-id": "field_prod_office",
+                    "x-index": 2
+                  },
+                  "infoCenterConfirm": {
+                    "type": "string",
+                    "title": "信息中心",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "rows": 2,
+                      "placeholder": "请输入审核意见"
+                    },
+                    "name": "infoCenterConfirm",
+                    "x-designable-id": "field_info_center",
+                    "x-index": 3
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "2j2dbuancza"
+  }
+}

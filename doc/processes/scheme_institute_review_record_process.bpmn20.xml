@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="scheme_institute_review_record_process" name="方案所审记录流程" isExecutable="true">
+    <documentation>
+      方案审查阶段 - 所审记录表
+      流程说明：I-IV类项目不能跳过所审，V类项目可选择跳过
+      流程路径：项目负责人 -> 记录人填写意见 -> 主持人确认 -> 负责人按意见修改 -> 主持人验证
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_initiate" />
+
+    <userTask id="task_pm_initiate" name="项目负责人发起" flowable:assignee="${initiator}" flowable:formKey="scheme_institute_review_record">
+      <documentation>项目负责人选择参会所长、记录人，确认基本信息，或申请跳过(仅V类)</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_gateway" sourceRef="task_pm_initiate" targetRef="gateway_skip_check" />
+
+    <exclusiveGateway id="gateway_skip_check" name="是否跳过所审?" />
+
+    <!-- V类项目跳过分支 -->
+    <sequenceFlow id="flow_skip_yes" name="是 (V类跳过)" sourceRef="gateway_skip_check" targetRef="task_dept_admin_approve_skip">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('isSkipInstitute', 'no') == 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="task_dept_admin_approve_skip" name="部门主管审批跳过" flowable:candidateGroups="DEPT_ADMIN" flowable:formKey="scheme_institute_review_record">
+      <documentation>审批V类项目是否可以跳过所审阶段</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_skip_approved" sourceRef="task_dept_admin_approve_skip" targetRef="endEvent" />
+
+    <!-- 正常所审分支 -->
+    <sequenceFlow id="flow_skip_no" name="否 (正常所审)" sourceRef="gateway_skip_check" targetRef="task_recorder_fill">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('isSkipInstitute', 'no') != 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="task_recorder_fill" name="记录人填写意见" flowable:assignee="${recorderId}" flowable:formKey="scheme_institute_review_record">
+      <documentation>记录人填写所审意见、记录方案得分、填写规划/工程校对人</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_recorder_to_host" sourceRef="task_recorder_fill" targetRef="task_host_confirm" />
+
+    <userTask id="task_host_confirm" name="主持人确认意见" flowable:assignee="${hostId}" flowable:formKey="scheme_institute_review_record">
+      <documentation>主持人(所长)审批确认记录人填写的信息</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_host_to_pm_modify" sourceRef="task_host_confirm" targetRef="task_pm_modify" />
+
+    <userTask id="task_pm_modify" name="项目负责人修改方案" flowable:assignee="${initiator}" flowable:formKey="scheme_institute_review_record">
+      <documentation>项目负责人查看所审意见，按意见修改方案并上传修改后的方案</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_modify_to_verify" sourceRef="task_pm_modify" targetRef="task_host_verify" />
+
+    <userTask id="task_host_verify" name="主持人验证" flowable:assignee="${hostId}" flowable:formKey="scheme_institute_review_record">
+      <documentation>主持人验证修改后的方案是否按所审意见修改</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_verify_to_gateway" sourceRef="task_host_verify" targetRef="gateway_verify_result" />
+
+    <exclusiveGateway id="gateway_verify_result" name="验证是否通过?" />
+
+    <sequenceFlow id="flow_verify_pass" name="验证通过" sourceRef="gateway_verify_result" targetRef="endEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('verificationResult', 'no') == 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_verify_fail" name="验证不通过" sourceRef="gateway_verify_result" targetRef="task_pm_modify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('verificationResult', 'no') != 'yes'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_scheme_inst">
+    <bpmndi:BPMNPlane id="BPMNPlane_scheme_inst" bpmnElement="scheme_institute_review_record_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="100" y="250" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_initiate" bpmnElement="task_pm_initiate">
+        <omgdc:Bounds x="180" y="235" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_gateway_skip_check" bpmnElement="gateway_skip_check" isMarkerVisible="true">
+        <omgdc:Bounds x="330" y="245" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dept_admin_approve_skip" bpmnElement="task_dept_admin_approve_skip">
+        <omgdc:Bounds x="430" y="120" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_recorder_fill" bpmnElement="task_recorder_fill">
+        <omgdc:Bounds x="430" y="350" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_host_confirm" bpmnElement="task_host_confirm">
+        <omgdc:Bounds x="580" y="350" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_modify" bpmnElement="task_pm_modify">
+        <omgdc:Bounds x="730" y="350" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_host_verify" bpmnElement="task_host_verify">
+        <omgdc:Bounds x="880" y="350" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_gateway_verify_result" bpmnElement="gateway_verify_result" isMarkerVisible="true">
+        <omgdc:Bounds x="1030" y="360" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="1150" y="250" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

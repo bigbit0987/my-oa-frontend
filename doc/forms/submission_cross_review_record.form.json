@@ -1,0 +1,791 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12,
+    "labelAlign": "left",
+    "style": {
+      "padding": "10px 24px"
+    }
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "tableLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "x-component-props": {
+          "style": {
+            "boxShadow": "2px 1px 5px 4px rgba(0, 0, 0, 0.1)",
+            "padding": "10px",
+            "borderRadius": "6px"
+          }
+        },
+        "name": "tableLayout",
+        "x-designable-id": "d73ra2kwpld",
+        "x-index": 0,
+        "properties": {
+          "headerTitle": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "送审成果（交叉审核）意见记录",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center",
+                "fontFamily": "arial black,sans-serif",
+                "margin": "10px 0 20px 0"
+              }
+            },
+            "name": "headerTitle",
+            "x-designable-id": "mb3675f5d5w",
+            "x-index": 0
+          },
+          "applicantInfoGrid": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "applicantInfoGrid",
+            "x-designable-id": "applicant_info_grid",
+            "x-index": 1,
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId",
+                "x-designable-id": "applicant_id_field",
+                "x-index": 0
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId",
+                "x-designable-id": "dept_id_field",
+                "x-index": 1
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime",
+                "x-designable-id": "apply_time_field",
+                "x-index": 2
+              }
+            }
+          },
+          "projectInfoSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "size": "small",
+              "styles": {
+                "header": {
+                  "display": "none"
+                }
+              }
+            },
+            "name": "projectInfoSection",
+            "x-designable-id": "l4b175vj7m5",
+            "x-index": 2,
+            "properties": {
+              "infoGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4
+                },
+                "name": "infoGrid",
+                "x-designable-id": "yzgm6s7p8h4",
+                "x-index": 0,
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "title": "项目名称",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 4
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "project"
+                    },
+                    "x-component-props": {
+                      "placeholder": "请选择项目",
+                      "showSearch": true,
+                      "filterOption": true,
+                      "optionFilterProp": "label"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择项目"
+                      }
+                    ],
+                    "name": "projectId",
+                    "x-reactions": [
+                      {
+                        "dependencies": [],
+                        "fulfill": {
+                          "run": "\n                            if (!$self.value) return;\n                            const projectId = $self.value;\n                            $form.$http.get('/api/v1/forms/data/project/' + projectId)\n                              .then(res => {\n                                const data = res.data || {};\n                                $form.setFieldState('projectNumber', state => { state.value = data.projectNumber || ''; });\n                                $form.setFieldState('projectManagerId', state => { state.value = data.projectManagerId ? String(data.projectManagerId) : ''; });\n                                $form.setFieldState('responsibleDeptId', state => { state.value = data.responsibleDeptId ? String(data.responsibleDeptId) : ''; });\n                                $form.setFieldState('projectLevelKey', state => { state.value = data.projectLevelKey || ''; });\n                                $form.setFieldState('controlLevelKey', state => { state.value = data.controlLevelKey || ''; });\n                                $form.setFieldState('projectSupervisorId', state => { state.value = data.projectSupervisorId ? String(data.projectSupervisorId) : ''; });\n                                $form.setFieldState('projectAuditorId', state => { state.value = data.projectAuditorId ? String(data.projectAuditorId) : ''; });\n                              })\n                              .catch(err => { console.error('加载项目详情失败:', err); });\n                          "
+                        }
+                      }
+                    ],
+                    "x-designable-id": "oqpofk9u4tt",
+                    "x-index": 0
+                  },
+                  "projectNumber": {
+                    "type": "string",
+                    "title": "项目编号",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "projectNumber",
+                    "x-designable-id": "maugitv6pwg",
+                    "x-index": 1
+                  },
+                  "controlLevelKey": {
+                    "type": "string",
+                    "title": "流程管控程度",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "control_level"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "controlLevelKey",
+                    "x-designable-id": "wabszn1tpmp",
+                    "x-index": 2
+                  },
+                  "projectManagerId": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "projectManagerId",
+                    "x-designable-id": "neocnq3bkvb",
+                    "x-index": 3
+                  },
+                  "projectLevelKey": {
+                    "type": "string",
+                    "title": "项目分级",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "project_level"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "projectLevelKey",
+                    "x-designable-id": "k30xllab9uy",
+                    "x-index": 4
+                  },
+                  "responsibleDeptId": {
+                    "type": "string",
+                    "title": "承担部门",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "dept"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "responsibleDeptId",
+                    "x-designable-id": "fvqov0vtfk0",
+                    "x-index": 5
+                  }
+                }
+              }
+            }
+          },
+          "selfJudgmentSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "所内自主判断（仅适用于V类流程）",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "selfJudgmentSection",
+            "x-designable-id": "zxuf2h0du8a",
+            "x-index": 3,
+            "properties": {
+              "judgmentGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 1
+                },
+                "name": "judgmentGrid",
+                "x-designable-id": "za0m98xlzyr",
+                "x-index": 0,
+                "properties": {
+                  "isSkipStage": {
+                    "type": "string",
+                    "title": "是否跳过此阶段",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "isSkipStage",
+                    "x-designable-id": "oj6myhy7r7r",
+                    "x-validator": [],
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-index": 0
+                  },
+                  "skipReason": {
+                    "type": "string",
+                    "title": "跳过原因",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "placeholder": "请输入跳过原因"
+                    },
+                    "name": "skipReason",
+                    "x-reactions": {
+                      "dependencies": [
+                        "isSkipStage"
+                      ],
+                      "fulfill": {
+                        "state": {
+                          "visible": "{{$deps[0] === 'yes'}}",
+                          "required": "{{$deps[0] === 'yes'}}"
+                        }
+                      }
+                    },
+                    "x-designable-id": "iktamvjz5ko",
+                    "x-validator": [],
+                    "x-decorator-props": {},
+                    "x-index": 1
+                  },
+                  "leaderApproval": {
+                    "type": "string",
+                    "title": "领导审批",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 2,
+                      "description": "<span style='color:red'>说明：填写跳过原因与领导审批不能为同一人！（当所领导同时为项目负责人时，需特别注意）</span>"
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "leaderApproval",
+                    "x-reactions": {
+                      "dependencies": [
+                        "isSkipStage"
+                      ],
+                      "fulfill": {
+                        "state": {
+                          "visible": "{{$deps[0] === 'yes'}}",
+                          "required": "{{$deps[0] === 'yes'}}"
+                        }
+                      }
+                    },
+                    "x-designable-id": "pwqwdd6010q",
+                    "x-index": 2
+                  }
+                }
+              }
+            }
+          },
+          "reviewInfoSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "reviewInfoSection",
+            "x-designable-id": "yfkc7q16mm3",
+            "x-index": 4,
+            "properties": {
+              "reviewInfoGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 3
+                },
+                "name": "reviewInfoGrid",
+                "x-designable-id": "nuyp3g3ylil",
+                "x-index": 0,
+                "properties": {
+                  "projectAuditorId": {
+                    "type": "string",
+                    "title": "项目审核",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-pattern": "readPretty",
+                    "name": "projectAuditorId",
+                    "x-designable-id": "qu70tgh8l8o",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {}
+                  },
+                  "designatedAuditorId": {
+                    "type": "string",
+                    "title": "指定项目审核人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "designatedAuditorId",
+                    "x-designable-id": "cwacak6g0uz",
+                    "x-index": 1
+                  },
+                  "modifierId": {
+                    "type": "string",
+                    "title": "修改人员",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "modifierId",
+                    "x-designable-id": "crfa0xvfggl",
+                    "x-index": 2
+                  }
+                }
+              }
+            }
+          },
+          "auditorOpinionSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核人意见",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "auditorOpinionSection",
+            "x-designable-id": "l3x3lqd7q1r",
+            "x-index": 5,
+            "properties": {
+              "opinionsTable": {
+                "type": "array",
+                "x-decorator": "FormItem",
+                "x-component": "ArrayTable",
+                "x-component-props": {
+                  "pagination": false,
+                  "bordered": true
+                },
+                "name": "opinionsTable",
+                "x-designable-id": "4378ymu3og4",
+                "x-index": 0,
+                "items": {
+                  "type": "object",
+                  "x-designable-id": "c8hem3pwqpu",
+                  "properties": {
+                    "index": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "序号",
+                        "width": 60,
+                        "align": "center"
+                      },
+                      "name": "index",
+                      "x-designable-id": "5wc5zxrd8zi",
+                      "x-index": 0,
+                      "properties": {
+                        "index": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Index",
+                          "name": "index",
+                          "x-designable-id": "aka0t7wxjwr",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "opinionContent": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "意见"
+                      },
+                      "name": "opinionContent",
+                      "x-designable-id": "390zvxy7p31",
+                      "x-index": 1,
+                      "properties": {
+                        "content": {
+                          "type": "string",
+                          "x-component": "Input.TextArea",
+                          "name": "content",
+                          "x-designable-id": "kwkl6m4otyt",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "opinionType": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "意见类型",
+                        "width": 150
+                      },
+                      "name": "opinionType",
+                      "x-designable-id": "rcftkcuyz7b",
+                      "x-index": 2,
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "x-component": "Select",
+                          "x-dynamic-data": {
+                            "type": "dict",
+                            "dictKey": "opinion_type"
+                          },
+                          "name": "type",
+                          "x-designable-id": "pcynn7fhlft",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "operation": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "操作",
+                        "width": 60,
+                        "align": "center"
+                      },
+                      "name": "operation",
+                      "x-designable-id": "0dpr4fvz4hc",
+                      "x-index": 3,
+                      "properties": {
+                        "remove": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Remove",
+                          "name": "remove",
+                          "x-designable-id": "inpzum3753d",
+                          "x-index": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "properties": {
+                  "add": {
+                    "type": "void",
+                    "x-component": "ArrayTable.Addition",
+                    "x-component-props": {
+                      "title": "添加意见"
+                    },
+                    "name": "add",
+                    "x-designable-id": "05rbkmul8vc",
+                    "x-index": 0
+                  }
+                }
+              },
+              "signatureConfirmation": {
+                "type": "string",
+                "title": "签字确认",
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "审核人签字"
+                },
+                "name": "signatureConfirmation",
+                "x-designable-id": "tv3uoygovw5",
+                "x-index": 1,
+                "x-validator": [],
+                "x-decorator-props": {}
+              }
+            }
+          },
+          "modificationRecordSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "修改记录",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "modificationRecordSection",
+            "x-designable-id": "34g5ie17hwe",
+            "x-index": 6,
+            "properties": {
+              "modGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 1
+                },
+                "name": "modGrid",
+                "x-designable-id": "jhqse0v0t4i",
+                "x-index": 0,
+                "properties": {
+                  "modificationStatus": {
+                    "type": "string",
+                    "title": "修改情况",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "完全修改",
+                          "value": "full"
+                        },
+                        {
+                          "label": "部分修改",
+                          "value": "partial"
+                        }
+                      ]
+                    },
+                    "name": "modificationStatus",
+                    "x-designable-id": "hax6kwfwgj4",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "x-decorator-props": {}
+                  },
+                  "modificationSignature": {
+                    "type": "string",
+                    "title": "意见/签字",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "modificationSignature",
+                    "x-designable-id": "ej689w49g3x",
+                    "x-index": 1,
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {}
+                  }
+                }
+              }
+            }
+          },
+          "auditorVerificationSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核人验证",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "auditorVerificationSection",
+            "x-designable-id": "5tl1mv7vw5c",
+            "x-index": 7,
+            "properties": {
+              "verifyGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 1
+                },
+                "name": "verifyGrid",
+                "x-designable-id": "zqzvwgf9ewy",
+                "x-index": 0,
+                "properties": {
+                  "auditQuality": {
+                    "type": "string",
+                    "title": "所级审核质量",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "合格",
+                          "value": "qualified"
+                        },
+                        {
+                          "label": "不合格",
+                          "value": "unqualified"
+                        }
+                      ]
+                    },
+                    "name": "auditQuality",
+                    "x-designable-id": "f33l5cxmo3v",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "x-decorator-props": {}
+                  },
+                  "finishTime": {
+                    "type": "string",
+                    "title": "完成时间",
+                    "x-decorator": "FormItem",
+                    "x-component": "DatePicker",
+                    "x-component-props": {
+                      "format": "YYYY-MM-DD HH:mm:ss"
+                    },
+                    "name": "finishTime",
+                    "x-designable-id": "eyyihd90jla",
+                    "x-index": 1,
+                    "x-validator": [],
+                    "x-decorator-props": {}
+                  },
+                  "isModifiedAsRequired": {
+                    "type": "string",
+                    "title": "是否已按校对意见修改",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "isModifiedAsRequired",
+                    "x-designable-id": "eajkg0aheiz",
+                    "x-index": 2
+                  },
+                  "modificationCheckSignature": {
+                    "type": "string",
+                    "title": "意见/签字",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "modificationCheckSignature",
+                    "x-designable-id": "2zd7rvlg8gl",
+                    "x-index": 3
+                  },
+                  "dispositionOpinion": {
+                    "type": "string",
+                    "title": "是否同意及处置意见",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 2
+                    },
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "同意",
+                          "value": "agree"
+                        },
+                        {
+                          "label": "不同意",
+                          "value": "disagree"
+                        }
+                      ]
+                    },
+                    "name": "dispositionOpinion",
+                    "x-designable-id": "3ppuuwg2a9c",
+                    "x-index": 4
+                  }
+                }
+              }
+            }
+          },
+          "academyVerificationSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "院审意见验证",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "textAlign": "center"
+                }
+              }
+            },
+            "name": "academyVerificationSection",
+            "x-designable-id": "ldinvzk2dzn",
+            "x-index": 8,
+            "properties": {
+              "isAcademyModified": {
+                "type": "string",
+                "title": "送审成果已按院审会意见修改",
+                "x-decorator": "FormItem",
+                "x-component": "Radio.Group",
+                "x-component-props": {
+                  "options": [
+                    {
+                      "label": "是",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "否",
+                      "value": "no"
+                    }
+                  ]
+                },
+                "name": "isAcademyModified",
+                "x-designable-id": "lrtxrxtfmeq",
+                "x-index": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "r9f21ejdhyb"
+  }
+}

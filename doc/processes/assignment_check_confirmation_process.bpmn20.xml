@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="assignment_check_confirmation_process" name="任务书接收确认流程" isExecutable="true">
+    <documentation>
+      归档评分阶段 - 任务书接收确认（自动触发）
+      流程说明：项目负责人确认信息 -> 技术办接收确认 -> 信息中心接收确认
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_confirm" />
+
+    <userTask id="task_pm_confirm" name="项目负责人确认" flowable:assignee="${initiator}" flowable:formKey="assignment_check_confirmation">
+      <documentation>项目负责人确认项目信息与顾客满意度</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_tech" sourceRef="task_pm_confirm" targetRef="task_tech_receive" />
+
+    <userTask id="task_tech_receive" name="技术办接收确认" flowable:candidateGroups="TECH_OFFICE" flowable:formKey="assignment_check_confirmation">
+      <documentation>技术办确认接收时间并签名</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_tech_to_info" sourceRef="task_tech_receive" targetRef="task_info_receive" />
+
+    <userTask id="task_info_receive" name="信息中心接收确认" flowable:candidateGroups="INFO_CENTER" flowable:formKey="assignment_check_confirmation">
+      <documentation>信息中心确认接收时间并签名</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_info_to_end" sourceRef="task_info_receive" targetRef="endEvent" />
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_assign_check">
+    <bpmndi:BPMNPlane id="BPMNPlane_assign_check" bpmnElement="assignment_check_confirmation_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="150" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_confirm" bpmnElement="task_pm_confirm">
+        <omgdc:Bounds x="230" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tech_receive" bpmnElement="task_tech_receive">
+        <omgdc:Bounds x="380" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_info_receive" bpmnElement="task_info_receive">
+        <omgdc:Bounds x="530" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="680" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

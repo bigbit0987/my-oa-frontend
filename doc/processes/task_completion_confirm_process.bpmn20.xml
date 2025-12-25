@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="task_completion_confirm_process" name="任务完成认定流程" isExecutable="true">
+    <documentation>
+      归档评分阶段 - 任务完成认定（自动触发，I-III类项目必须走）
+      流程说明：项目负责人填写得分信息 -> 技术办审核打分 -> 生产经营室确认
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_fill" />
+
+    <userTask id="task_pm_fill" name="项目负责人填写得分信息" flowable:assignee="${initiator}" flowable:formKey="task_completion_confirm">
+      <documentation>项目负责人填写项目信息、确认历史申报情况、推优/数据增强等标志</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_tech" sourceRef="task_pm_fill" targetRef="task_tech_score" />
+
+    <userTask id="task_tech_score" name="技术办审核打分" flowable:candidateGroups="TECH_OFFICE" flowable:formKey="task_completion_confirm">
+      <documentation>技术办审核工期得分与质量得分</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_tech_to_prod" sourceRef="task_tech_score" targetRef="task_prod_confirm" />
+
+    <userTask id="task_prod_confirm" name="生产经营室确认" flowable:candidateGroups="PROD_OFFICE" flowable:formKey="task_completion_confirm">
+      <documentation>生产经营室确认最终综合得分</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_prod_to_end" sourceRef="task_prod_confirm" targetRef="endEvent" />
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_task_comp">
+    <bpmndi:BPMNPlane id="BPMNPlane_task_comp" bpmnElement="task_completion_confirm_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="150" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_fill" bpmnElement="task_pm_fill">
+        <omgdc:Bounds x="230" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tech_score" bpmnElement="task_tech_score">
+        <omgdc:Bounds x="380" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_prod_confirm" bpmnElement="task_prod_confirm">
+        <omgdc:Bounds x="530" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="680" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

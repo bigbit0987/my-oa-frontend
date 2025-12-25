@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.company.com/workflow" exporter="Camunda Modeler" exporterVersion="5.41.0">
+  <process id="project_registration_process" name="项目登记流程" isExecutable="true">
+    <startEvent id="startEvent" flowable:initiator="initiator" />
+    <sequenceFlow id="flow_start_to_draft" sourceRef="startEvent" targetRef="task_draft" />
+    <userTask id="task_draft" name="填写申请" flowable:assignee="${initiator}" flowable:formKey="project_registration" flowable:formFieldValidation="true">
+      <documentation>发起人填写项目登记信息，可保存草稿</documentation>
+      <outgoing>Flow_draft_to_service</outgoing>
+    </userTask>
+    <sequenceFlow id="Flow_draft_to_service" sourceRef="task_draft" targetRef="endEvent_completed" />
+    <serviceTask id="service_find_production_leader" name="查找生产经营室主任" flowable:delegateExpression="${findPostUserDelegate}">
+      <extensionElements>
+        <flowable:field name="postCode">
+          <flowable:string>MANAGER_01</flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow_service_to_approval" sourceRef="service_find_production_leader" targetRef="task_leader_approval" />
+    <userTask id="task_leader_approval" name="生产经营室主任审批" flowable:candidateUsers="${postUsernames}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_approval_to_service_vp1" sourceRef="task_leader_approval" targetRef="service_find_managing_vp" />
+    <serviceTask id="service_find_managing_vp" name="查找经营副院长" flowable:delegateExpression="${findPostUserDelegate}">
+      <extensionElements>
+        <flowable:field name="postCode">
+          <flowable:string>LEADER_02</flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow_service_vp1_to_task" sourceRef="service_find_managing_vp" targetRef="task_vp1_assign_issuer" />
+    <userTask id="task_vp1_assign_issuer" name="经营副院长确定签发人" flowable:candidateUsers="${postUsernames}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_vp1_to_gateway" sourceRef="task_vp1_assign_issuer" targetRef="gateway_project_level" />
+    <exclusiveGateway id="gateway_project_level" name="判断项目分级" />
+    <sequenceFlow id="flow_path_suo_a" name="所A项目" sourceRef="gateway_project_level" targetRef="merge_all_branches">
+      <conditionExpression xsi:type="tFormalExpression">${projectLevelKey == 'suo_a'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_path_suo_b" name="所B项目" sourceRef="gateway_project_level" targetRef="task_initiator_judge_audit">
+      <conditionExpression xsi:type="tFormalExpression">${projectLevelKey == 'suo_b'}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="task_initiator_judge_audit" name="判断是否需院长指定审核" flowable:assignee="${initiator}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_judge_to_merge" sourceRef="task_initiator_judge_audit" targetRef="merge_all_branches" />
+    <sequenceFlow id="flow_path_yuan_ab" name="院A或院B项目" sourceRef="gateway_project_level" targetRef="service_find_technical_vp">
+      <conditionExpression xsi:type="tFormalExpression">
+                ${projectLevelKey == 'yuan_a' || projectLevelKey == 'yuan_b'}
+            </conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="service_find_technical_vp" name="查找技术副院长" flowable:delegateExpression="${findPostUserDelegate}">
+      <extensionElements>
+        <flowable:field name="postCode">
+          <flowable:string>LEADER_02</flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow_service_vp2_to_task" sourceRef="service_find_technical_vp" targetRef="task_vp2_confirm_reviewers" />
+    <userTask id="task_vp2_confirm_reviewers" name="技术副院长确认主管与审核" flowable:candidateUsers="${postUsernames}" flowable:formKey="project_registration" flowable:formFieldValidation="true">
+      <extensionElements>
+        <flowable:taskListener event="create" expression="${execution.setVariable(&#39;originalControlLevelKey&#39;, controlLevelKey)}" />
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow_vp2_to_gateway_change" sourceRef="task_vp2_confirm_reviewers" targetRef="gateway_control_level_changed" />
+    <exclusiveGateway id="gateway_control_level_changed" name="是否更改流程管控强度?" />
+    <sequenceFlow id="flow_path_changed" name="是" sourceRef="gateway_control_level_changed" targetRef="task_initiator_update_schedule">
+      <conditionExpression xsi:type="tFormalExpression">${controlLevelKey != originalControlLevelKey}
+            </conditionExpression>
+    </sequenceFlow>
+    <userTask id="task_initiator_update_schedule" name="发起者修改工期" flowable:assignee="${initiator}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_schedule_to_merge" sourceRef="task_initiator_update_schedule" targetRef="merge_after_schedule_update" />
+    <sequenceFlow id="flow_path_not_changed" name="否" sourceRef="gateway_control_level_changed" targetRef="merge_after_schedule_update">
+      <conditionExpression xsi:type="tFormalExpression">${controlLevelKey == originalControlLevelKey}
+            </conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="merge_after_schedule_update" />
+    <sequenceFlow id="flow_merge1_to_merge2" sourceRef="merge_after_schedule_update" targetRef="merge_all_branches" />
+    <exclusiveGateway id="merge_all_branches" />
+    <sequenceFlow id="flow_merge_to_director" sourceRef="merge_all_branches" targetRef="service_find_responsible_director" />
+    <serviceTask id="service_find_responsible_director" name="查找承担部门所长" flowable:delegateExpression="${findResponsibleDeptDirectorDelegate}" />
+    <sequenceFlow id="flow_service_director_to_task" sourceRef="service_find_responsible_director" targetRef="task_director_assign_team" />
+    <userTask id="task_director_assign_team" name="所长确定项目组成员" flowable:assignee="${responsibleDeptDirector}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <userTask id="task_pm_main" name="到项目负责人" flowable:assignee="${projectManagerUsername}" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_pm_to_infocenter" sourceRef="task_pm_main" targetRef="task_infocenter_check_scope" />
+    <userTask id="task_infocenter_check_scope" name="信息中心检查上传范围线" flowable:candidateGroups="INFO_CENTER" flowable:formKey="project_registration" flowable:formFieldValidation="true" />
+    <sequenceFlow id="flow_infocenter_to_end" sourceRef="task_infocenter_check_scope" targetRef="endEvent_completed" />
+    <endEvent id="endEvent_completed" name="项目登记完成">
+      <extensionElements>
+        <flowable:executionListener event="end" delegateExpression="${projectApprovedListener}" />
+      </extensionElements>
+      <incoming>Flow_draft_to_service</incoming>
+    </endEvent>
+    <sequenceFlow id="flow_director_to_resolve_pm" sourceRef="task_director_assign_team" targetRef="service_resolve_project_manager" />
+    <serviceTask id="service_resolve_project_manager" name="解析项目负责人用户名" flowable:delegateExpression="${resolveProjectManagerDelegate}" />
+    <sequenceFlow id="flow_resolve_pm_to_task" name="" sourceRef="service_resolve_project_manager" targetRef="task_pm_main" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_project_registration">
+    <bpmndi:BPMNPlane id="BPMNPlane_project_registration" bpmnElement="project_registration_process">
+      <bpmndi:BPMNShape id="BPMNShape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="155" y="415" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_draft" bpmnElement="task_draft">
+        <omgdc:Bounds x="220" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_service_find_production_leader" bpmnElement="service_find_production_leader">
+        <omgdc:Bounds x="370" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_leader_approval" bpmnElement="task_leader_approval">
+        <omgdc:Bounds x="500" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yu6yrd_di" bpmnElement="service_find_managing_vp">
+        <omgdc:Bounds x="650" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_vp1_assign_issuer" bpmnElement="task_vp1_assign_issuer">
+        <omgdc:Bounds x="800" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_gateway_project_level" bpmnElement="gateway_project_level" isMarkerVisible="true">
+        <omgdc:Bounds x="990" y="410" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="977" y="450" width="66" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_initiator_judge_audit" bpmnElement="task_initiator_judge_audit">
+        <omgdc:Bounds x="1045" y="310" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04np2ah_di" bpmnElement="service_find_technical_vp">
+        <omgdc:Bounds x="1045" y="570" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_vp2_confirm_reviewers" bpmnElement="task_vp2_confirm_reviewers">
+        <omgdc:Bounds x="1190" y="580" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_gateway_control_level_changed" bpmnElement="gateway_control_level_changed" isMarkerVisible="true">
+        <omgdc:Bounds x="1350" y="590" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1400" y="596" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_initiator_update_schedule" bpmnElement="task_initiator_update_schedule">
+        <omgdc:Bounds x="1480" y="655" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_merge_after_schedule_update" bpmnElement="merge_after_schedule_update" isMarkerVisible="true">
+        <omgdc:Bounds x="1650" y="520" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_merge_all_branches" bpmnElement="merge_all_branches" isMarkerVisible="true">
+        <omgdc:Bounds x="1650" y="410" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yc2c1q_di" bpmnElement="service_find_responsible_director">
+        <omgdc:Bounds x="1730" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_director_assign_team" bpmnElement="task_director_assign_team">
+        <omgdc:Bounds x="1860" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_pm_main" bpmnElement="task_pm_main">
+        <omgdc:Bounds x="2240" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_task_infocenter_check_scope" bpmnElement="task_infocenter_check_scope">
+        <omgdc:Bounds x="2450" y="400" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_endEvent_completed" bpmnElement="endEvent_completed">
+        <omgdc:Bounds x="2626" y="416" width="28" height="28" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="2607" y="444" width="66" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wj1ru9_di" bpmnElement="service_resolve_project_manager">
+        <omgdc:Bounds x="2020" y="390" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_start_to_draft" bpmnElement="flow_start_to_draft" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="185" y="430" />
+        <omgdi:waypoint x="220" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16kwkp9_di" bpmnElement="Flow_draft_to_service">
+        <omgdi:waypoint x="270" y="400" />
+        <omgdi:waypoint x="270" y="80" />
+        <omgdi:waypoint x="2640" y="80" />
+        <omgdi:waypoint x="2640" y="416" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_service_to_approval" bpmnElement="flow_service_to_approval" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="470" y="430" />
+        <omgdi:waypoint x="500" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w4wnpw_di" bpmnElement="flow_approval_to_service_vp1">
+        <omgdi:waypoint x="600" y="430" />
+        <omgdi:waypoint x="650" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_submit_to_vp1" bpmnElement="flow_service_vp1_to_task" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="750" y="430" />
+        <omgdi:waypoint x="800" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_vp1_to_gateway" bpmnElement="flow_vp1_to_gateway" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="900" y="430" />
+        <omgdi:waypoint x="990" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_path_suo_a" bpmnElement="flow_path_suo_a" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1030" y="430" />
+        <omgdi:waypoint x="1650" y="430" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1320" y="405" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_path_suo_b" bpmnElement="flow_path_suo_b" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="1010" y="410" />
+        <omgdi:waypoint x="1010" y="340" />
+        <omgdi:waypoint x="1045" y="340" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1005" y="365" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_judge_to_merge" bpmnElement="flow_judge_to_merge" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1145" y="340" />
+        <omgdi:waypoint x="1670" y="340" />
+        <omgdi:waypoint x="1670" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_path_yuan_ab" bpmnElement="flow_path_yuan_ab" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="1010" y="450" />
+        <omgdi:waypoint x="1010" y="600" />
+        <omgdi:waypoint x="1045" y="600" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="990" y="515" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e0ku04_di" bpmnElement="flow_service_vp2_to_task">
+        <omgdi:waypoint x="1145" y="610" />
+        <omgdi:waypoint x="1190" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_vp2_to_gateway_change" bpmnElement="flow_vp2_to_gateway_change" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1290" y="610" />
+        <omgdi:waypoint x="1350" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_path_changed" bpmnElement="flow_path_changed" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="1370" y="630" />
+        <omgdi:waypoint x="1370" y="685" />
+        <omgdi:waypoint x="1480" y="685" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1380" y="648" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_schedule_to_merge" bpmnElement="flow_schedule_to_merge" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1580" y="685" />
+        <omgdi:waypoint x="1670" y="685" />
+        <omgdi:waypoint x="1670" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_path_not_changed" bpmnElement="flow_path_not_changed" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1370" y="590" />
+        <omgdi:waypoint x="1370" y="540" />
+        <omgdi:waypoint x="1650" y="540" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1380" y="555" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_merge1_to_merge2" bpmnElement="flow_merge1_to_merge2" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1670" y="520" />
+        <omgdi:waypoint x="1670" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_merge_to_director" bpmnElement="flow_merge_to_director" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="1690" y="430" />
+        <omgdi:waypoint x="1730" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o7j8ml_di" bpmnElement="flow_service_director_to_task">
+        <omgdi:waypoint x="1830" y="430" />
+        <omgdi:waypoint x="1860" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_pm_to_infocenter" bpmnElement="flow_pm_to_infocenter" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="50.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="2340" y="430" />
+        <omgdi:waypoint x="2450" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow_infocenter_to_end" bpmnElement="flow_infocenter_to_end" flowable:sourceDockerX="50.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2550" y="430" />
+        <omgdi:waypoint x="2626" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kawoxk_di" bpmnElement="flow_director_to_resolve_pm">
+        <omgdi:waypoint x="1960" y="430" />
+        <omgdi:waypoint x="2020" y="430" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1951" y="162" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rlesnp_di" bpmnElement="flow_resolve_pm_to_task">
+        <omgdi:waypoint x="2120" y="430" />
+        <omgdi:waypoint x="2240" y="430" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="2136" y="162" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

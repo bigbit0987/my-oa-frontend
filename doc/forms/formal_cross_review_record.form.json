@@ -1,0 +1,3441 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12,
+    "labelAlign": "left",
+    "style": {
+      "padding": "10px 24px",
+      "backgroundColor": ""
+    },
+    "colon": false
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "tableLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "x-component-props": {
+          "style": {
+            "borderRadius": "6px",
+            "boxShadow": "0 2px 8px rgba(0,0,0,0.1)",
+            "padding": "16px",
+            "backgroundColor": "#fff"
+          }
+        },
+        "name": "tableLayout",
+        "x-designable-id": "k2nzzrnfmt7",
+        "x-index": 0,
+        "properties": {
+          "tableHeader": {
+            "type": "string",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "正式成果交叉审核",
+              "mode": "h1",
+              "style": {
+                "display": "block",
+                "fontFamily": "arial black,sans-serif",
+                "margin": "10px 0 20px 0",
+                "textAlign": "center"
+              }
+            },
+            "name": "tableHeader",
+            "x-designable-id": "pxjimvo09nw",
+            "x-index": 0
+          },
+          "applicantInfoGrid": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "applicantInfoGrid",
+            "x-designable-id": "applicant_info_grid",
+            "x-index": 1,
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId",
+                "x-designable-id": "applicant_id_field",
+                "x-index": 0
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId",
+                "x-designable-id": "dept_id_field",
+                "x-index": 1
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime",
+                "x-designable-id": "apply_time_field",
+                "x-index": 2
+              }
+            }
+          },
+          "basicInfoSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "项目基本信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            "name": "basicInfoSection",
+            "x-designable-id": "rvmc80pfrmo",
+            "x-index": 2,
+            "properties": {
+              "basicInfoGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4,
+                  "columnGap": 12
+                },
+                "name": "basicInfoGrid",
+                "x-index": 0,
+                "x-designable-id": "527q3v5bx76",
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "title": "项目名称",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 4
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "project"
+                    },
+                    "x-component-props": {
+                      "placeholder": "请选择项目",
+                      "showSearch": true,
+                      "filterOption": true,
+                      "optionFilterProp": "label"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择项目"
+                      }
+                    ],
+                    "name": "projectId",
+                    "x-index": 0,
+                    "x-reactions": [
+                      {
+                        "dependencies": [],
+                        "fulfill": {
+                          "run": "\n                if (!$self.value) return;\n                const projectId = $self.value;\n                $form.$http.get('/api/v1/forms/data/project/' + projectId)\n                  .then(res => {\n                    const data = res.data || {};\n                    $form.setFieldState('projectNumber', state => { state.value = data.projectNumber || ''; });\n                    $form.setFieldState('projectManagerId', state => { state.value = data.projectManagerId ? String(data.projectManagerId) : ''; });\n                    $form.setFieldState('responsibleDeptId', state => { state.value = data.responsibleDeptId ? String(data.responsibleDeptId) : ''; });\n                    $form.setFieldState('projectLevelKey', state => { state.value = data.projectLevelKey || ''; });\n                    $form.setFieldState('controlLevelKey', state => { state.value = data.controlLevelKey || ''; });\n                    $form.setFieldState('projectSupervisorId', state => { state.value = data.projectSupervisorId ? String(data.projectSupervisorId) : ''; });\n                    $form.setFieldState('projectAuditorId', state => { state.value = data.projectAuditorId ? String(data.projectAuditorId) : ''; });\n                  })\n                  .catch(err => { console.error('加载项目详情失败:', err); });\n              "
+                        }
+                      }
+                    ],
+                    "x-designable-id": "om6vggmypg9"
+                  },
+                  "projectNumber": {
+                    "type": "string",
+                    "title": "项目编号",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "projectNumber",
+                    "x-index": 1,
+                    "x-designable-id": "kbe2vrtt80e"
+                  },
+                  "projectManagerId": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "projectManagerId",
+                    "x-index": 2,
+                    "x-designable-id": "rug4px28yad"
+                  },
+                  "responsibleDeptId": {
+                    "type": "string",
+                    "title": "承担部门",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dept"
+                    },
+                    "name": "responsibleDeptId",
+                    "x-index": 3,
+                    "x-designable-id": "9sgjn2o0x88"
+                  },
+                  "controlLevelKey": {
+                    "type": "string",
+                    "title": "流程管控强度",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "control_level"
+                    },
+                    "name": "controlLevelKey",
+                    "x-index": 4,
+                    "x-designable-id": "l545kq0vzq9"
+                  },
+                  "projectLevelKey": {
+                    "type": "string",
+                    "title": "项目分级",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "dict",
+                      "dictKey": "project_level"
+                    },
+                    "name": "projectLevelKey",
+                    "x-index": 5,
+                    "x-designable-id": "zdoyltph58f"
+                  },
+                  "projectSupervisorId": {
+                    "type": "string",
+                    "title": "项目主管",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "projectSupervisorId",
+                    "x-index": 6,
+                    "x-designable-id": "68cimsi8oyp"
+                  },
+                  "reviewCount": {
+                    "type": "number",
+                    "title": "已审核次数",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-pattern": "readPretty",
+                    "name": "reviewCount",
+                    "x-index": 7,
+                    "x-designable-id": "z43knjr6hws"
+                  },
+                  "projectAuditorId": {
+                    "type": "string",
+                    "title": "项目审核",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-pattern": "readPretty",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "projectAuditorId",
+                    "x-index": 8,
+                    "x-designable-id": "f89fvess96s"
+                  }
+                }
+              }
+            }
+          },
+          "internalJudgmentSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "所内自主判断 (仅适用于V类流程)",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "internalJudgmentSection",
+            "x-designable-id": "azrt378m8p2",
+            "x-index": 3,
+            "properties": {
+              "judgmentWarning": {
+                "type": "void",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "说明: 填写跳过原因与领导审批不能为同一人！(当所领导同时为项目负责人时，需特别注意)",
+                  "style": {
+                    "color": "red",
+                    "fontSize": "12px",
+                    "marginBottom": "10px",
+                    "display": "block",
+                    "textAlign": "center"
+                  }
+                },
+                "name": "judgmentWarning",
+                "x-designable-id": "s7ciwrw44vv",
+                "x-index": 0
+              },
+              "judgmentGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2,
+                  "columnGap": 10
+                },
+                "name": "judgmentGrid",
+                "x-designable-id": "20nx7af9d0c",
+                "x-validator": [],
+                "x-index": 1,
+                "properties": {
+                  "isSkipStage": {
+                    "type": "string",
+                    "title": "是否跳过此阶段",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "isSkipStage",
+                    "default": "no",
+                    "x-designable-id": "w1yfd2wwktt",
+                    "x-index": 0
+                  },
+                  "emptyCol": {
+                    "type": "void",
+                    "x-component": "FormGrid.GridColumn",
+                    "name": "emptyCol",
+                    "x-designable-id": "hd6rc2wdnnk",
+                    "x-index": 1
+                  },
+                  "skipReason": {
+                    "type": "string",
+                    "title": "跳过原因",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 2
+                    },
+                    "x-component": "Input.TextArea",
+                    "name": "skipReason",
+                    "x-reactions": {
+                      "dependencies": [
+                        "isSkipStage"
+                      ],
+                      "fulfill": {
+                        "state": {
+                          "visible": "{{$deps[0] === 'yes'}}"
+                        }
+                      }
+                    },
+                    "x-designable-id": "m8505ucvrp4",
+                    "x-index": 2
+                  },
+                  "leaderApprovalId": {
+                    "type": "string",
+                    "title": "领导审批",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "leaderApprovalId",
+                    "x-reactions": {
+                      "dependencies": [
+                        "isSkipStage"
+                      ],
+                      "fulfill": {
+                        "state": {
+                          "visible": "{{$deps[0] === 'yes'}}"
+                        }
+                      }
+                    },
+                    "x-designable-id": "adbo0m171xy",
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {
+                      "gridSpan": 2
+                    },
+                    "x-index": 3
+                  }
+                }
+              }
+            }
+          },
+          "reviewInfoSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "reviewInfoSection",
+            "x-designable-id": "veau08sz2mx",
+            "x-index": 4,
+            "properties": {
+              "reviewGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4,
+                  "columnGap": 10
+                },
+                "name": "reviewGrid",
+                "x-designable-id": "k8ip37dzz9b",
+                "x-index": 0,
+                "properties": {
+                  "projectReviewerId": {
+                    "type": "string",
+                    "title": "项目审核",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "projectReviewerId",
+                    "x-designable-id": "5k4u0f1aa6e",
+                    "x-index": 0
+                  },
+                  "designatedReviewerId": {
+                    "type": "string",
+                    "title": "指定审核人员",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "designatedReviewerId",
+                    "x-designable-id": "v9y1fz6sfuw",
+                    "x-index": 1
+                  },
+                  "modifierId": {
+                    "type": "string",
+                    "title": "修改人员",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "gridSpan": 1
+                    },
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "name": "modifierId",
+                    "x-designable-id": "22lv43y9t82",
+                    "x-index": 2,
+                    "x-validator": [],
+                    "x-component-props": {}
+                  },
+                  "completionTime": {
+                    "type": "string",
+                    "title": "完成时间",
+                    "x-decorator": "FormItem",
+                    "x-component": "DatePicker",
+                    "x-component-props": {
+                      "showTime": true,
+                      "format": "YYYY-MM-DD HH:mm"
+                    },
+                    "name": "completionTime",
+                    "x-designable-id": "61ibk9y44dj",
+                    "x-index": 3
+                  }
+                }
+              }
+            }
+          },
+          "attachmentSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "中间过程附件",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "attachmentSection",
+            "x-designable-id": "knc8ip6m5ae",
+            "x-index": 5,
+            "properties": {
+              "attachmentWarning": {
+                "type": "void",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "注意：附件上传 (请上传原文件，不要上传压缩包！)",
+                  "style": {
+                    "color": "red",
+                    "fontWeight": "bold",
+                    "marginBottom": "10px",
+                    "display": "block",
+                    "textAlign": "center"
+                  }
+                },
+                "name": "attachmentWarning",
+                "x-designable-id": "nuho8jsa984",
+                "x-index": 0
+              },
+              "tableContainer": {
+                "type": "void",
+                "x-component": "div",
+                "x-component-props": {
+                  "style": {
+                    "border": "1px solid #d9d9d9",
+                    "borderRadius": "4px",
+                    "overflow": "hidden"
+                  }
+                },
+                "name": "tableContainer",
+                "x-index": 1,
+                "x-designable-id": "q1eaifb41r8",
+                "properties": {
+                  "headerRow": {
+                    "type": "void",
+                    "x-component": "div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "backgroundColor": "#fafafa",
+                        "fontWeight": "bold",
+                        "textAlign": "center",
+                        "borderBottom": "1px solid #d9d9d9"
+                      }
+                    },
+                    "name": "headerRow",
+                    "x-designable-id": "nz3t617frt6",
+                    "x-index": 0,
+                    "properties": {
+                      "h1": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "类型",
+                          "style": {
+                            "width": "12.5%",
+                            "minWidth": "12.5%",
+                            "maxWidth": "12.5%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h1",
+                        "x-designable-id": "hg7lzejse8i",
+                        "x-index": 0
+                      },
+                      "h2": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "有无(电子/纸质)",
+                          "style": {
+                            "width": "12.5%",
+                            "minWidth": "12.5%",
+                            "maxWidth": "12.5%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h2",
+                        "x-designable-id": "yxc6fj794oq",
+                        "x-index": 1
+                      },
+                      "h3": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "纸质送甲方",
+                          "style": {
+                            "width": "12.5%",
+                            "minWidth": "12.5%",
+                            "maxWidth": "12.5%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h3",
+                        "x-designable-id": "fuj4v37yxss",
+                        "x-index": 2
+                      },
+                      "h4": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "纸质归档",
+                          "style": {
+                            "width": "12.5%",
+                            "minWidth": "12.5%",
+                            "maxWidth": "12.5%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h4",
+                        "x-designable-id": "0rjjk76aflh",
+                        "x-index": 3
+                      },
+                      "h5": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "纸质数量",
+                          "style": {
+                            "width": "8%",
+                            "minWidth": "8%",
+                            "maxWidth": "8%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h5",
+                        "x-designable-id": "h4s8rnt13gc",
+                        "x-index": 4
+                      },
+                      "h6": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "附件上传",
+                          "style": {
+                            "width": "25%",
+                            "minWidth": "25%",
+                            "maxWidth": "25%",
+                            "padding": "8px",
+                            "borderRight": "1px solid #d9d9d9",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h6",
+                        "x-designable-id": "5xx0xc1mrzi",
+                        "x-index": 5
+                      },
+                      "h7": {
+                        "type": "void",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "备注",
+                          "style": {
+                            "width": "17%",
+                            "minWidth": "17%",
+                            "maxWidth": "17%",
+                            "padding": "8px",
+                            "boxSizing": "border-box",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                          }
+                        },
+                        "name": "h7",
+                        "x-designable-id": "baom9t536v3",
+                        "x-index": 6
+                      }
+                    }
+                  },
+                  "dataRows": {
+                    "type": "void",
+                    "x-component": "div",
+                    "name": "dataRows",
+                    "x-designable-id": "tozo75xsed8",
+                    "x-index": 1,
+                    "properties": {
+                      "row1": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row1",
+                        "x-designable-id": "a2x04pqxo1q",
+                        "x-index": 0,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "区(市)县规自局审查",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "yudimr905pz",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "gpbvdpmm2aj",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "bb0cbpv9vpa",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "uuj2noe3xr6",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "oxkukh6orag",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "iu3lkja51vs",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "uvexuhs6cvq",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "eic3ubt5lta",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料和审查纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "mg9s95yk6dj",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row2": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row2",
+                        "x-designable-id": "p0u6fii4xvn",
+                        "x-index": 1,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "区规委会",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "38cqmzxhtn9",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "p4lhmja8r0b",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "s07xiraj90g",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "d1nrih3ypsx",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "uqq83hoddki",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "zqhqt4h117q",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "wn0m9c60g9e",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "ihiumb0tnir",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料和审查纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "rvg6537j4ib",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row3": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row3",
+                        "x-designable-id": "yo7jspjv3jm",
+                        "x-index": 2,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "市局处室审查",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "ntrr9yh897t",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "rb9xbz467yx",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "5sdzzoei2xp",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "gn66tkxulxq",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "uvvh1ljwzpo",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "pwfymrd2iw5",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "ns7mna2443h",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "7ayy8mmywvk",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "tohy5efdybb",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row4": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row4",
+                        "x-designable-id": "u5pgmwt4slw",
+                        "x-index": 3,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "专家审查",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "1iu2bz18m3d",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "wrrajc5i9nr",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "6m89gjdtn0f",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "urthg4z254j",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "2b62a0ji9mg",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "dyb25nu060c",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "tibsezesvnd",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "c3rd3readnc",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料和审查纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "gh21b2as3kr",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row5": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row5",
+                        "x-designable-id": "dvdd6p0dgot",
+                        "x-index": 4,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "市局局审",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "e2gdvprvslo",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "o03d9mc0l1w",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "0j8zds1dbnz",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "94m5ly6kxft",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "8t5hy13r520",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "wgdky9chyk6",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "rgqwnjzbuuo",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "86nypwimzwe",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料和审查纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "f85y7ug31da",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row6": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row6",
+                        "x-designable-id": "bjlp0oy2pzn",
+                        "x-index": 5,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "市局局长办公会",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "y533vs47o5w",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "6fabwncm4j8",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "7lifl6iuabf",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "gqnxj5jnv3e",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "a0msi204zvd",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "626go7mxgk6",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "lz6x7v7xs1m",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "zqtj294m1fq",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "上会材料和审查纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "czrig50bqj7",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row7": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row7",
+                        "x-designable-id": "nkuh040nbd1",
+                        "x-index": 6,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "公告图",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "ms4f93dz0xf",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "g3zzocpr659",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "n69neojn5zs",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "js9ro5py6jw",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "5g2btyccdwa",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "pxl5sbr6tw8",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "rwgof06givy",
+                                "x-index": 0
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "ftknqxrq5ws",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row8": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row8",
+                        "x-designable-id": "763cbf3ixuw",
+                        "x-index": 7,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "网上公告图截图",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "xzhn2qinjmu",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "zmqs5e7n47k",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "g89nu3l4vi2",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "z0stinfwd6x",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "5yb6vjec78n",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "flyjumkzbs5",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "lgodkqp0w8d",
+                                "x-index": 0
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "xq69btlfiyl",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row9": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row9",
+                        "x-designable-id": "vbtyfogy1tv",
+                        "x-index": 8,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "公告意见表",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "d3i3iwwd916",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "37fdxte60ac",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "3s9oy67px1d",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "65rtk8wvvj2",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "uq4r9or66ep",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "smkkow8wh3f",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "dho663f3vzm",
+                                "x-index": 0
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "anat3quhyok",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row10": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row10",
+                        "x-designable-id": "yqrzfpumd72",
+                        "x-index": 9,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "市规委会",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "kt6j3a3j3dw",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "ena9rtllef1",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "24tedpj42as",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "pk2h6vih0wb",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "9p4efof5vzh",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "lxmriao3ryc",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "pepj5pcv4do",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "1pz33lmtoxb",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "z71s9ymnoav",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row11": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "borderBottom": "1px solid #d9d9d9",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row11",
+                        "x-designable-id": "oa2casgxcrm",
+                        "x-index": 10,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "报批",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "jqwezjidw8f",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "c3mtaak0ax0",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "18gegiy27wq",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "1cq49nj71wu",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "7pajtev7v4c",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "otwnen6wwtk",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "pjc3p3y2idp",
+                                "x-index": 0
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "mepgf70rtzx",
+                            "x-index": 6
+                          }
+                        }
+                      },
+                      "row12": {
+                        "type": "object",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "alignItems": "center",
+                            "minHeight": "45px"
+                          }
+                        },
+                        "name": "row12",
+                        "x-designable-id": "e763uc3suhf",
+                        "x-index": 11,
+                        "properties": {
+                          "label": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "其他",
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "padding": "8px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "textAlign": "center"
+                              }
+                            },
+                            "name": "label",
+                            "x-designable-id": "1ozqi0wtfog",
+                            "x-index": 0
+                          },
+                          "hasFile": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "hasFile",
+                            "x-designable-id": "by0koc6is2d",
+                            "x-index": 1
+                          },
+                          "sentToClient": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "sentToClient",
+                            "x-designable-id": "zj2mhsqjf6v",
+                            "x-index": 2
+                          },
+                          "isArchived": {
+                            "type": "string",
+                            "x-component": "Radio.Group",
+                            "x-component-props": {
+                              "options": [
+                                {
+                                  "label": "有",
+                                  "value": "yes"
+                                },
+                                {
+                                  "label": "无",
+                                  "value": "no"
+                                }
+                              ],
+                              "style": {
+                                "width": "12.5%",
+                                "minWidth": "12.5%",
+                                "maxWidth": "12.5%",
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "isArchived",
+                            "x-designable-id": "782g65zzxoh",
+                            "x-index": 3
+                          },
+                          "paperCount": {
+                            "type": "number",
+                            "x-component": "NumberPicker",
+                            "x-component-props": {
+                              "style": {
+                                "width": "8%",
+                                "minWidth": "8%",
+                                "maxWidth": "8%",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "paperCount",
+                            "x-designable-id": "yy4hw8tnut1",
+                            "x-index": 4
+                          },
+                          "uploadSection": {
+                            "type": "void",
+                            "x-component": "div",
+                            "x-component-props": {
+                              "style": {
+                                "width": "25%",
+                                "minWidth": "25%",
+                                "maxWidth": "25%",
+                                "padding": "5px",
+                                "borderRight": "1px solid #d9d9d9",
+                                "boxSizing": "border-box"
+                              }
+                            },
+                            "name": "uploadSection",
+                            "x-designable-id": "f9gf0nqg0ux",
+                            "x-index": 5,
+                            "properties": {
+                              "file": {
+                                "type": "array",
+                                "x-component": "Upload",
+                                "x-component-props": {
+                                  "textContent": "点击上传"
+                                },
+                                "name": "file",
+                                "x-designable-id": "rmkr5bmj7ha",
+                                "x-index": 0
+                              },
+                              "hasMeetingMinutes": {
+                                "type": "boolean",
+                                "title": "是否关联会议纪要",
+                                "x-decorator": "FormItem",
+                                "x-component": "Checkbox",
+                                "name": "hasMeetingMinutes",
+                                "x-designable-id": "nc11cn378p0",
+                                "x-index": 1
+                              }
+                            }
+                          },
+                          "remark": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "如环城生态区有市人大听证会上会材料和纪要",
+                              "style": {
+                                "width": "17%",
+                                "minWidth": "17%",
+                                "maxWidth": "17%",
+                                "color": "blue",
+                                "textAlign": "center",
+                                "boxSizing": "border-box",
+                                "padding": "4px"
+                              }
+                            },
+                            "name": "remark",
+                            "x-designable-id": "xr02uzvzges",
+                            "x-index": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "opinionSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核人意见",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "opinionSection",
+            "x-designable-id": "kvp1mnwxkzd",
+            "x-index": 6,
+            "properties": {
+              "techOpinions": {
+                "type": "array",
+                "x-component": "ArrayTable",
+                "x-component-props": {
+                  "bordered": true,
+                  "pagination": false
+                },
+                "name": "techOpinions",
+                "x-designable-id": "dirbvgfa98l",
+                "x-index": 0,
+                "items": {
+                  "type": "object",
+                  "x-designable-id": "hjhz84jx0g2",
+                  "properties": {
+                    "index": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "序号",
+                        "width": 60,
+                        "align": "center"
+                      },
+                      "name": "index",
+                      "x-designable-id": "iff5uja0rwc",
+                      "x-index": 0,
+                      "properties": {
+                        "idx": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Index",
+                          "name": "idx",
+                          "x-designable-id": "vun02btzfw3",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "opinion": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "意见内容"
+                      },
+                      "name": "opinion",
+                      "x-designable-id": "rt3ubo1kxw7",
+                      "x-index": 1,
+                      "properties": {
+                        "opinionText": {
+                          "type": "string",
+                          "x-component": "Input.TextArea",
+                          "name": "opinionText",
+                          "x-designable-id": "3zqly0fzt8b",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "opinionType": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "意见类型",
+                        "width": 150
+                      },
+                      "name": "opinionType",
+                      "x-designable-id": "fof1z2tntuy",
+                      "x-index": 2,
+                      "properties": {
+                        "typeSelect": {
+                          "type": "string",
+                          "x-component": "Select",
+                          "x-dynamic-data": {
+                            "type": "dict",
+                            "dictKey": "opinion_type"
+                          },
+                          "name": "typeSelect",
+                          "x-designable-id": "asm4kzpwkqk",
+                          "x-index": 0
+                        }
+                      }
+                    },
+                    "operation": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "操作",
+                        "width": 60,
+                        "align": "center"
+                      },
+                      "name": "operation",
+                      "x-designable-id": "k15iuzm1njy",
+                      "x-index": 3,
+                      "properties": {
+                        "remove": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Remove",
+                          "name": "remove",
+                          "x-designable-id": "dgkjhqlmpx4",
+                          "x-index": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "properties": {
+                  "add": {
+                    "type": "void",
+                    "x-component": "ArrayTable.Addition",
+                    "x-component-props": {
+                      "title": "添加意见"
+                    },
+                    "name": "add",
+                    "x-designable-id": "qe5anba6fo7",
+                    "x-index": 0
+                  }
+                }
+              },
+              "signature": {
+                "type": "string",
+                "title": "签字确认",
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "name": "signature",
+                "x-decorator-props": {
+                  "style": {
+                    "marginTop": "10px"
+                  }
+                },
+                "x-designable-id": "wxak3se3kob",
+                "x-index": 1
+              }
+            }
+          },
+          "revisionRecordSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "修改记录",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "revisionRecordSection",
+            "x-designable-id": "b6o2pjbp1fs",
+            "x-index": 7,
+            "properties": {
+              "revisionGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2,
+                  "columnGap": 10
+                },
+                "name": "revisionGrid",
+                "x-designable-id": "revisiongrid001",
+                "x-index": 0,
+                "properties": {
+                  "revisionType": {
+                    "type": "string",
+                    "title": "修改类型",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "完全修改",
+                          "value": "full"
+                        },
+                        {
+                          "label": "部分修改",
+                          "value": "partial"
+                        }
+                      ]
+                    },
+                    "name": "revisionType",
+                    "x-designable-id": "revisiontype001",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "x-decorator-props": {
+                      "gridSpan": 2
+                    }
+                  },
+                  "revisionNote": {
+                    "type": "string",
+                    "title": "说明/签字",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "rows": 2
+                    },
+                    "name": "revisionNote",
+                    "x-designable-id": "revisionnote001",
+                    "x-index": 1,
+                    "x-validator": [],
+                    "x-decorator-props": {
+                      "gridSpan": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "verificationSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审核人验证",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px",
+                  "fontWeight": "bold"
+                }
+              },
+              "style": {
+                "marginTop": "16px"
+              }
+            },
+            "name": "verificationSection",
+            "x-designable-id": "5t3qb79w6c9",
+            "x-index": 8,
+            "properties": {
+              "verificationGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2,
+                  "columnGap": 20
+                },
+                "name": "verificationGrid",
+                "x-designable-id": "v3f1962henk",
+                "x-index": 0,
+                "properties": {
+                  "deptReviewQuality": {
+                    "type": "string",
+                    "title": "所级审核质量",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "合格",
+                          "value": "qualified"
+                        },
+                        {
+                          "label": "不合格",
+                          "value": "unqualified"
+                        }
+                      ]
+                    },
+                    "name": "deptReviewQuality",
+                    "x-designable-id": "f98bchenq5q",
+                    "x-index": 0
+                  },
+                  "reviewScore": {
+                    "type": "number",
+                    "title": "审核得分",
+                    "x-decorator": "FormItem",
+                    "x-component": "NumberPicker",
+                    "name": "reviewScore",
+                    "x-designable-id": "5psnrgjfg9f",
+                    "x-index": 1
+                  },
+                  "isModifiedByOpinion": {
+                    "type": "string",
+                    "title": "是否已按校对意见修改",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "isModifiedByOpinion",
+                    "x-designable-id": "0kzv8fv1bny",
+                    "x-index": 2
+                  },
+                  "isModifiedByMinutes": {
+                    "type": "string",
+                    "title": "正式成果已按照审查纪要修改",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "isModifiedByMinutes",
+                    "x-designable-id": "xm5om9lmpq1",
+                    "x-index": 3
+                  },
+                  "finalAgreeLeft": {
+                    "type": "string",
+                    "title": "是否同意及处置意见",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "finalAgreeLeft",
+                    "x-designable-id": "a5myubwzt4b",
+                    "x-index": 4
+                  },
+                  "finalAgreeRight": {
+                    "type": "string",
+                    "title": "是否同意及处置意见",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "是",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "否",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "finalAgreeRight",
+                    "x-designable-id": "1udxfr22vd9",
+                    "x-index": 5
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "2j2dbuancza"
+  }
+}

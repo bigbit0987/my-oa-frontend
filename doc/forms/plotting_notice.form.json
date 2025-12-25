@@ -1,0 +1,1037 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12,
+    "labelAlign": "left",
+    "colon": false,
+    "style": {
+      "margin": "0px",
+      "padding": "10px 24px 10px 24px"
+    }
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "tableLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "x-component-props": {
+          "style": {
+            "padding": "10px",
+            "boxShadow": "2px 1px 5px 4px rgba(0, 0, 0, 0.1)",
+            "borderRadius": "6px"
+          }
+        },
+        "name": "tableLayout",
+        "x-designable-id": "plot_layout",
+        "x-index": 0,
+        "properties": {
+          "header": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "项目出图通知单",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center",
+                "fontFamily": "arial black,sans-serif",
+                "fontSize": "22px",
+                "margin": "10px 0 20px 0",
+                "fontWeight": "bold"
+              }
+            },
+            "name": "header",
+            "x-designable-id": "plot_header",
+            "x-index": 0
+          },
+          "applicantInfoGrid": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "applicantInfoGrid",
+            "x-designable-id": "applicant_info_grid",
+            "x-index": 1,
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId",
+                "x-designable-id": "applicant_id_field",
+                "x-index": 0
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId",
+                "x-designable-id": "dept_id_field",
+                "x-index": 1
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime",
+                "x-designable-id": "apply_time_field",
+                "x-index": 2
+              }
+            }
+          },
+          "headerTable": {
+            "type": "void",
+            "x-component": "div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "column",
+                "border": "1px solid #000",
+                "marginBottom": "10px"
+              }
+            },
+            "name": "headerTable",
+            "x-designable-id": "plot_header_table",
+            "x-index": 2,
+            "properties": {
+              "headerRow": {
+                "type": "void",
+                "x-component": "div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex"
+                  }
+                },
+                "name": "headerRow",
+                "x-designable-id": "plot_header_row",
+                "x-index": 0,
+                "properties": {
+                  "projectNameCell": {
+                    "type": "void",
+                    "x-component": "div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "width": "40%",
+                        "borderRight": "1px solid #000"
+                      }
+                    },
+                    "x-designable-id": "project_name_cell",
+                    "x-index": 0,
+                    "properties": {
+                      "projectNameLabel": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "width": "80px",
+                            "minWidth": "80px",
+                            "backgroundColor": "#fafafa",
+                            "borderRight": "1px solid #000",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                            "padding": "8px 5px",
+                            "fontSize": "13px",
+                            "fontWeight": "bold"
+                          }
+                        },
+                        "x-designable-id": "project_name_label",
+                        "x-index": 0,
+                        "properties": {
+                          "labelText": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "项目名称"
+                            },
+                            "x-designable-id": "project_name_label_text",
+                            "x-index": 0
+                          }
+                        }
+                      },
+                      "projectNameValue": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "flex": 1,
+                            "padding": "5px 10px",
+                            "display": "flex",
+                            "alignItems": "center"
+                          }
+                        },
+                        "x-designable-id": "project_name_value",
+                        "x-index": 1,
+                        "properties": {
+                          "projectId": {
+                            "type": "string",
+                            "x-component": "Select",
+                            "x-dynamic-data": {
+                              "type": "project"
+                            },
+                            "x-component-props": {
+                              "placeholder": "请选择项目",
+                              "showSearch": true,
+                              "filterOption": true,
+                              "optionFilterProp": "label",
+                              "style": {
+                                "width": "100%"
+                              }
+                            },
+                            "x-validator": [
+                              {
+                                "required": true,
+                                "message": "请选择项目"
+                              }
+                            ],
+                            "name": "projectId",
+                            "x-designable-id": "plot_project_id",
+                            "x-index": 0,
+                            "x-reactions": [
+                              {
+                                "dependencies": [],
+                                "fulfill": {
+                                  "run": "\n                                    if (!$self.value) return;\n                                    const projectId = $self.value;\n                                    $form.$http.get('/api/v1/forms/data/project/' + projectId)\n                                      .then(res => {\n                                        const data = res.data || {};\n                                        $form.setFieldState('projectNumber', state => { state.value = data.projectNumber || ''; });\n                                        $form.setFieldState('responsibleDeptId', state => { state.value = data.responsibleDeptId ? String(data.responsibleDeptId) : ''; });\n                                        $form.setFieldState('projectManagerId', state => { state.value = data.projectManagerId ? String(data.projectManagerId) : ''; });\n                                      })\n                                      .catch(err => { console.error('加载项目详情失败:', err); });\n                                  "
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "projectNumCell": {
+                    "type": "void",
+                    "x-component": "div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "width": "20%",
+                        "borderRight": "1px solid #000"
+                      }
+                    },
+                    "x-designable-id": "project_num_cell",
+                    "x-index": 1,
+                    "properties": {
+                      "projectNumLabel": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "width": "70px",
+                            "minWidth": "70px",
+                            "backgroundColor": "#fafafa",
+                            "borderRight": "1px solid #000",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                            "padding": "8px 5px",
+                            "fontSize": "13px",
+                            "fontWeight": "bold"
+                          }
+                        },
+                        "x-designable-id": "project_num_label",
+                        "x-index": 0,
+                        "properties": {
+                          "labelText": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "项目编号"
+                            },
+                            "x-designable-id": "project_num_label_text",
+                            "x-index": 0
+                          }
+                        }
+                      },
+                      "projectNumValue": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "flex": 1,
+                            "padding": "5px 10px",
+                            "display": "flex",
+                            "alignItems": "center"
+                          }
+                        },
+                        "x-designable-id": "project_num_value",
+                        "x-index": 1,
+                        "properties": {
+                          "projectNumber": {
+                            "type": "string",
+                            "x-component": "Input",
+                            "x-pattern": "readPretty",
+                            "name": "projectNumber",
+                            "x-designable-id": "plot_project_num",
+                            "x-index": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "undertakingCell": {
+                    "type": "void",
+                    "x-component": "div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "width": "20%",
+                        "borderRight": "1px solid #000"
+                      }
+                    },
+                    "x-designable-id": "undertaking_cell",
+                    "x-index": 2,
+                    "properties": {
+                      "undertakingLabel": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "width": "90px",
+                            "minWidth": "90px",
+                            "backgroundColor": "#fafafa",
+                            "borderRight": "1px solid #000",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                            "padding": "8px 5px",
+                            "fontSize": "13px",
+                            "fontWeight": "bold"
+                          }
+                        },
+                        "x-designable-id": "undertaking_label",
+                        "x-index": 0,
+                        "properties": {
+                          "labelText": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "项目承接单位"
+                            },
+                            "x-designable-id": "undertaking_label_text",
+                            "x-index": 0
+                          }
+                        }
+                      },
+                      "undertakingValue": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "flex": 1,
+                            "padding": "5px 10px",
+                            "display": "flex",
+                            "alignItems": "center"
+                          }
+                        },
+                        "x-designable-id": "undertaking_value",
+                        "x-index": 1,
+                        "properties": {
+                          "responsibleDeptId": {
+                            "type": "string",
+                            "x-component": "Select",
+                            "x-dynamic-data": {
+                              "type": "dept"
+                            },
+                            "x-pattern": "readPretty",
+                            "x-component-props": {
+                              "style": {
+                                "width": "100%"
+                              }
+                            },
+                            "name": "responsibleDeptId",
+                            "x-designable-id": "plot_resp_dept",
+                            "x-index": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "managerCell": {
+                    "type": "void",
+                    "x-component": "div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "width": "20%"
+                      }
+                    },
+                    "x-designable-id": "manager_cell",
+                    "x-index": 3,
+                    "properties": {
+                      "managerLabel": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "width": "80px",
+                            "minWidth": "80px",
+                            "backgroundColor": "#fafafa",
+                            "borderRight": "1px solid #000",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                            "padding": "8px 5px",
+                            "fontSize": "13px",
+                            "fontWeight": "bold"
+                          }
+                        },
+                        "x-designable-id": "manager_label",
+                        "x-index": 0,
+                        "properties": {
+                          "labelText": {
+                            "type": "void",
+                            "x-component": "Text",
+                            "x-component-props": {
+                              "content": "项目负责人"
+                            },
+                            "x-designable-id": "manager_label_text",
+                            "x-index": 0
+                          }
+                        }
+                      },
+                      "managerValue": {
+                        "type": "void",
+                        "x-component": "div",
+                        "x-component-props": {
+                          "style": {
+                            "flex": 1,
+                            "padding": "5px 10px",
+                            "display": "flex",
+                            "alignItems": "center"
+                          }
+                        },
+                        "x-designable-id": "manager_value",
+                        "x-index": 1,
+                        "properties": {
+                          "projectManagerId": {
+                            "type": "string",
+                            "x-component": "Select",
+                            "x-dynamic-data": {
+                              "type": "user"
+                            },
+                            "x-pattern": "readPretty",
+                            "x-component-props": {
+                              "style": {
+                                "width": "100%"
+                              }
+                            },
+                            "name": "projectManagerId",
+                            "x-designable-id": "plot_project_mgr",
+                            "x-index": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "detailsTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-decorator-props": {
+              "colon": false
+            },
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "pagination": false,
+              "scroll": {
+                "x": 1200
+              },
+              "bordered": true,
+              "size": "small"
+            },
+            "name": "detailsTable",
+            "x-designable-id": "plot_details_table",
+            "x-index": 3,
+            "items": {
+              "type": "object",
+              "x-designable-id": "plot_table_items",
+              "properties": {
+                "col_index": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "序号",
+                    "width": 60,
+                    "align": "center"
+                  },
+                  "name": "col_index",
+                  "x-designable-id": "plot_col_index",
+                  "x-index": 0,
+                  "properties": {
+                    "index": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Index",
+                      "x-designable-id": "plot_index",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_paper": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "纸质",
+                    "width": 100
+                  },
+                  "name": "col_paper",
+                  "x-designable-id": "plot_col_paper",
+                  "x-index": 1,
+                  "properties": {
+                    "paperQuality": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "Select",
+                      "x-component-props": {
+                        "options": [
+                          {
+                            "label": "硫酸",
+                            "value": "sulfuric"
+                          },
+                          {
+                            "label": "绘图",
+                            "value": "blueprint"
+                          },
+                          {
+                            "label": "彩喷",
+                            "value": "inkjet"
+                          },
+                          {
+                            "label": "高光",
+                            "value": "high_gloss"
+                          }
+                        ],
+                        "placeholder": "选择"
+                      },
+                      "name": "paperQuality",
+                      "x-designable-id": "plot_paper_quality",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_color": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "色彩",
+                    "width": 100
+                  },
+                  "name": "col_color",
+                  "x-designable-id": "plot_col_color",
+                  "x-index": 2,
+                  "properties": {
+                    "colorMode": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "Select",
+                      "x-component-props": {
+                        "options": [
+                          {
+                            "label": "黑白",
+                            "value": "bw"
+                          },
+                          {
+                            "label": "色线",
+                            "value": "color_line"
+                          },
+                          {
+                            "label": "色块",
+                            "value": "color_block"
+                          }
+                        ],
+                        "placeholder": "选择"
+                      },
+                      "name": "colorMode",
+                      "x-designable-id": "plot_color_mode",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_a0": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "A0",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_a0",
+                  "x-designable-id": "plot_col_a0",
+                  "x-index": 3,
+                  "properties": {
+                    "a0": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "a0",
+                      "x-designable-id": "plot_a0",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_a1": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "A1",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_a1",
+                  "x-designable-id": "plot_col_a1",
+                  "x-index": 4,
+                  "properties": {
+                    "a1": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "a1",
+                      "x-designable-id": "plot_a1",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_a2": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "A2",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_a2",
+                  "x-designable-id": "plot_col_a2",
+                  "x-index": 5,
+                  "properties": {
+                    "a2": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "a2",
+                      "x-designable-id": "plot_a2",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_a3": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "A3",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_a3",
+                  "x-designable-id": "plot_col_a3",
+                  "x-index": 6,
+                  "properties": {
+                    "a3": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "a3",
+                      "x-designable-id": "plot_a3",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_waste_sets": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "套数",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_waste_sets",
+                  "x-designable-id": "plot_col_waste_sets",
+                  "x-index": 7,
+                  "properties": {
+                    "wasteSets": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "wasteSets",
+                      "x-designable-id": "plot_waste_sets",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_waste_copies": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "份",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_waste_copies",
+                  "x-designable-id": "plot_col_waste_copies",
+                  "x-index": 8,
+                  "properties": {
+                    "wasteCopies": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "wasteCopies",
+                      "x-designable-id": "plot_waste_copies",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_waste_subtotal": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "小计",
+                    "width": 70,
+                    "align": "center"
+                  },
+                  "name": "col_waste_subtotal",
+                  "x-designable-id": "plot_col_waste_subtotal",
+                  "x-index": 9,
+                  "properties": {
+                    "wasteSubtotal": {
+                      "type": "number",
+                      "x-decorator": "FormItem",
+                      "x-component": "NumberPicker",
+                      "x-component-props": {
+                        "min": 0,
+                        "style": {
+                          "width": "100%"
+                        }
+                      },
+                      "name": "wasteSubtotal",
+                      "x-designable-id": "plot_waste_subtotal",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_confirm": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "确认签字",
+                    "width": 120
+                  },
+                  "name": "col_confirm",
+                  "x-designable-id": "plot_col_confirm",
+                  "x-index": 10,
+                  "properties": {
+                    "confirmSignerId": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "Select",
+                      "x-dynamic-data": {
+                        "type": "user"
+                      },
+                      "x-component-props": {
+                        "placeholder": "选择签字人",
+                        "showSearch": true
+                      },
+                      "name": "confirmSignerId",
+                      "x-designable-id": "plot_confirm_signer",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_finish_time": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "完成时间",
+                    "width": 150
+                  },
+                  "name": "col_finish_time",
+                  "x-designable-id": "plot_col_finish_time",
+                  "x-index": 11,
+                  "properties": {
+                    "finishTime": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "DatePicker",
+                      "x-component-props": {
+                        "format": "YYYY-MM-DD",
+                        "placeholder": "选择日期"
+                      },
+                      "name": "finishTime",
+                      "x-designable-id": "plot_finish_time",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_plotter": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "出图人",
+                    "width": 120
+                  },
+                  "name": "col_plotter",
+                  "x-designable-id": "plot_col_plotter",
+                  "x-index": 12,
+                  "properties": {
+                    "plotterId": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "Select",
+                      "x-dynamic-data": {
+                        "type": "user"
+                      },
+                      "x-component-props": {
+                        "placeholder": "选择出图人",
+                        "showSearch": true
+                      },
+                      "name": "plotterId",
+                      "x-designable-id": "plot_plotter",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_memo": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "备注",
+                    "width": 150
+                  },
+                  "name": "col_memo",
+                  "x-designable-id": "plot_col_memo",
+                  "x-index": 13,
+                  "properties": {
+                    "memo": {
+                      "type": "string",
+                      "x-decorator": "FormItem",
+                      "x-component": "Input",
+                      "x-component-props": {
+                        "placeholder": "备注"
+                      },
+                      "name": "memo",
+                      "x-designable-id": "plot_memo",
+                      "x-index": 0
+                    }
+                  }
+                },
+                "col_operations": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 80,
+                    "fixed": "right",
+                    "align": "center"
+                  },
+                  "name": "col_operations",
+                  "x-designable-id": "plot_col_operations",
+                  "x-index": 14,
+                  "properties": {
+                    "remove": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Remove",
+                      "x-designable-id": "plot_remove",
+                      "x-index": 0
+                    }
+                  }
+                }
+              }
+            },
+            "properties": {
+              "add": {
+                "type": "void",
+                "x-component": "ArrayTable.Addition",
+                "x-component-props": {
+                  "title": "添加出图明细"
+                },
+                "name": "add",
+                "x-designable-id": "plot_add",
+                "x-index": 0
+              }
+            }
+          },
+          "approvalSection": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "审批信息",
+              "size": "small",
+              "styles": {
+                "header": {
+                  "paddingTop": "0px",
+                  "paddingBottom": "0px",
+                  "minHeight": "auto",
+                  "textAlign": "center",
+                  "backgroundColor": "rgb(200, 221, 252)",
+                  "fontSize": "16px"
+                }
+              },
+              "style": {
+                "marginTop": "15px"
+              }
+            },
+            "name": "approvalSection",
+            "x-designable-id": "plot_approval_section",
+            "x-index": 4,
+            "properties": {
+              "approvalGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 4,
+                  "columnGap": 10
+                },
+                "name": "approvalGrid",
+                "x-designable-id": "plot_approval_grid",
+                "x-index": 0,
+                "properties": {
+                  "deptVPId": {
+                    "type": "string",
+                    "title": "部门驻所副总/总助",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-component-props": {
+                      "placeholder": "选择审批人",
+                      "showSearch": true
+                    },
+                    "name": "deptVPId",
+                    "x-designable-id": "plot_dept_vp",
+                    "x-index": 0
+                  },
+                  "prodAssistantId": {
+                    "type": "string",
+                    "title": "生产经营室助理",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-component-props": {
+                      "placeholder": "选择审批人",
+                      "showSearch": true
+                    },
+                    "name": "prodAssistantId",
+                    "x-designable-id": "plot_prod_assistant",
+                    "x-index": 1
+                  },
+                  "prodRoomId": {
+                    "type": "string",
+                    "title": "生产经营室",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-dynamic-data": {
+                      "type": "user"
+                    },
+                    "x-component-props": {
+                      "placeholder": "选择审批人",
+                      "showSearch": true
+                    },
+                    "name": "prodRoomId",
+                    "x-designable-id": "plot_prod_room",
+                    "x-index": 2
+                  },
+                  "approvalDate": {
+                    "type": "string",
+                    "title": "时间",
+                    "x-decorator": "FormItem",
+                    "x-component": "DatePicker",
+                    "x-component-props": {
+                      "format": "YYYY-MM-DD",
+                      "placeholder": "选择日期"
+                    },
+                    "name": "approvalDate",
+                    "x-designable-id": "plot_approval_date",
+                    "x-index": 3
+                  }
+                }
+              }
+            }
+          },
+          "note": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "注：跨项目出图审批由部门驻所副总/总助在备注中签字确认。",
+              "style": {
+                "fontSize": "12px",
+                "color": "#666",
+                "marginTop": "10px"
+              }
+            },
+            "name": "note",
+            "x-designable-id": "plot_note",
+            "x-index": 5
+          }
+        }
+      }
+    },
+    "x-designable-id": "plot_root"
+  }
+}

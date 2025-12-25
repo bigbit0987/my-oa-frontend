@@ -1,0 +1,233 @@
+{
+  "form": {
+    "layout": "horizontal",
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "mainLayout": {
+        "type": "void",
+        "x-component": "FormLayout",
+        "name": "mainLayout",
+        "properties": {
+          "title": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "项目终止申请",
+              "mode": "h1",
+              "style": {
+                "textAlign": "center"
+              }
+            },
+            "name": "title"
+          },
+          "header": {
+            "type": "void",
+            "x-component": "FormGrid",
+            "x-component-props": {
+              "maxColumns": 3,
+              "style": {
+                "margin": "10px 0"
+              }
+            },
+            "name": "header",
+            "properties": {
+              "applicantId": {
+                "type": "string",
+                "title": "申请人",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "user"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择申请人",
+                  "showSearch": true
+                },
+                "name": "applicantId"
+              },
+              "deptId": {
+                "type": "string",
+                "title": "所属部门",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-dynamic-data": {
+                  "type": "dept"
+                },
+                "x-component-props": {
+                  "placeholder": "请选择部门",
+                  "showSearch": true
+                },
+                "name": "deptId"
+              },
+              "applyTime": {
+                "type": "string",
+                "title": "申请时间",
+                "x-decorator": "FormItem",
+                "x-component": "DatePicker",
+                "x-component-props": {
+                  "readOnly": true
+                },
+                "name": "applyTime"
+              }
+            }
+          },
+          "contentCard": {
+            "type": "void",
+            "x-component": "Card",
+            "x-component-props": {
+              "title": "申请内容",
+              "size": "small",
+              "headStyle": {
+                "backgroundColor": "rgb(159, 197, 232)",
+                "textAlign": "center"
+              }
+            },
+            "name": "contentCard",
+            "properties": {
+              "pName": {
+                "type": "string",
+                "title": "项目名称",
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "name": "pName"
+              },
+              "grid1": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2
+                },
+                "name": "grid1",
+                "properties": {
+                  "pNo": {
+                    "type": "string",
+                    "title": "项目编号",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "pNo"
+                  },
+                  "pMan": {
+                    "type": "string",
+                    "title": "项目负责人",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "pManager"
+                  },
+                  "dept": {
+                    "type": "string",
+                    "title": "承担部门",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "respDept"
+                  },
+                  "level": {
+                    "type": "string",
+                    "title": "项目分级",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "level"
+                  },
+                  "control": {
+                    "type": "string",
+                    "title": "流程管控强度",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "control"
+                  }
+                }
+              },
+              "reason": {
+                "type": "string",
+                "title": "1.项目终止或取消的原因",
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "layout": "vertical",
+                  "labelAlign": "left"
+                },
+                "x-component": "Input.TextArea",
+                "name": "reason",
+                "x-component-props": {
+                  "rows": 4
+                }
+              },
+              "workloadTitle": {
+                "type": "void",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "2.项目终止或取消时已完成的工作量：",
+                  "style": {
+                    "fontWeight": "bold",
+                    "marginTop": "10px"
+                  }
+                },
+                "name": "workloadTitle"
+              },
+              "workloadGrid": {
+                "type": "void",
+                "x-component": "FormGrid",
+                "x-component-props": {
+                  "maxColumns": 2
+                },
+                "name": "workloadGrid",
+                "properties": {
+                  "work": {
+                    "type": "string",
+                    "title": "已完成工作量",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "name": "workload"
+                  },
+                  "hasDoc": {
+                    "type": "string",
+                    "title": "是否有纪要",
+                    "x-decorator": "FormItem",
+                    "x-component": "Radio.Group",
+                    "x-component-props": {
+                      "options": [
+                        {
+                          "label": "有",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "无",
+                          "value": "no"
+                        }
+                      ]
+                    },
+                    "name": "hasDoc"
+                  }
+                }
+              },
+              "attachment": {
+                "type": "array",
+                "title": "上传成果附件",
+                "x-decorator": "FormItem",
+                "x-component": "Upload",
+                "name": "attachment"
+              }
+            }
+          },
+          "footerNote": {
+            "type": "void",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "注：\n1.项目终止泛指在项目运行过程中因各种原因而停止或转入其它生产任务的项目，终止的项目要进行劳务费核算。\n2.项目取消指合并、合同终止或其他原因而取消的项目，因其未开展工作不计劳务费，如有工作记入合并项目。",
+              "style": {
+                "color": "red",
+                "fontSize": "12px",
+                "marginTop": "10px",
+                "display": "block",
+                "whiteSpace": "pre-wrap"
+              }
+            },
+            "name": "footerNote"
+          }
+        }
+      }
+    }
+  }
+}

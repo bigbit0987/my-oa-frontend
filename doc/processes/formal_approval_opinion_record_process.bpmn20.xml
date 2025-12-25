@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:flowable="http://flowable.org/bpmn" 
+             targetNamespace="http://www.company.com/workflow" 
+             exporter="Camunda Modeler" 
+             exporterVersion="5.41.0">
+
+  <process id="formal_approval_opinion_record_process" name="正式成果审定记录流程" isExecutable="true">
+    <documentation>
+      正式成果阶段 - 审定记录（所有项目必须走，不能跳过）
+      流程说明：项目负责人 -> 技术办指定审定人 -> 审定人意见与验证 -> 修改人修改 -> 上传归档成果
+    </documentation>
+
+    <startEvent id="startEvent" name="开始" flowable:initiator="initiator" />
+    
+    <sequenceFlow id="flow_start_to_pm" sourceRef="startEvent" targetRef="task_pm_confirm" />
+
+    <userTask id="task_pm_confirm" name="项目负责人确认信息" flowable:assignee="${initiator}" flowable:formKey="formal_approval_opinion_record">
+      <documentation>项目负责人确认项目信息、选择修改人</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_pm_to_tech" sourceRef="task_pm_confirm" targetRef="task_tech_assign_approver" />
+
+    <userTask id="task_tech_assign_approver" name="技术办指定审定人" flowable:candidateGroups="TECH_OFFICE" flowable:formKey="formal_approval_opinion_record">
+      <documentation>技术办指定审定人员</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_tech_to_approver" sourceRef="task_tech_assign_approver" targetRef="task_approver_opinion" />
+
+    <userTask id="task_approver_opinion" name="审定人填写意见" flowable:assignee="${approverId}" flowable:formKey="formal_approval_opinion_record">
+      <documentation>审定人填写审定意见</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_approver_to_gateway" sourceRef="task_approver_opinion" targetRef="gateway_has_opinion" />
+
+    <exclusiveGateway id="gateway_has_opinion" name="是否有意见?" />
+
+    <sequenceFlow id="flow_no_opinion" name="无意见" sourceRef="gateway_has_opinion" targetRef="task_pm_upload">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('approvalOpinion', 'pass') == 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_has_opinion" name="有意见" sourceRef="gateway_has_opinion" targetRef="task_modifier_revise">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('approvalOpinion', 'pass') == 'has_opinion'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="task_modifier_revise" name="修改人修改" flowable:assignee="${modifierId}" flowable:formKey="formal_approval_opinion_record">
+      <documentation>修改人查看意见并按意见修改成果，填写修改记录</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_modifier_to_verify" sourceRef="task_modifier_revise" targetRef="task_approver_verify" />
+
+    <userTask id="task_approver_verify" name="审定人验证" flowable:assignee="${approverId}" flowable:formKey="formal_approval_opinion_record">
+      <documentation>审定人验证修改后成果，填写正式成果得分</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_verify_to_gateway" sourceRef="task_approver_verify" targetRef="gateway_verify_result" />
+
+    <exclusiveGateway id="gateway_verify_result" name="验证结果" />
+
+    <sequenceFlow id="flow_verify_pass" name="通过" sourceRef="gateway_verify_result" targetRef="task_pm_upload">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('isVerified', 'no') == 'yes' || vars:getOrDefault('finalResult', 'disagree') == 'agree'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_verify_fail" name="不通过" sourceRef="gateway_verify_result" targetRef="task_modifier_revise">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${vars:getOrDefault('isVerified', 'no') != 'yes' && vars:getOrDefault('finalResult', 'disagree') != 'agree'}]]></conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="task_pm_upload" name="项目负责人上传归档成果" flowable:assignee="${initiator}" flowable:formKey="formal_approval_opinion_record">
+      <documentation>项目负责人上传正式成果附件归档</documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_upload_to_end" sourceRef="task_pm_upload" targetRef="endEvent" />
+
+    <endEvent id="endEvent" name="结束" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_formal_approval">
+    <bpmndi:BPMNPlane id="BPMNPlane_formal_approval" bpmnElement="formal_approval_opinion_record_process">
+      <bpmndi:BPMNShape id="shape_startEvent" bpmnElement="startEvent">
+        <omgdc:Bounds x="100" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_pm_confirm" bpmnElement="task_pm_confirm">
+        <omgdc:Bounds x="180" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tech_assign_approver" bpmnElement="task_tech_assign_approver">
+        <omgdc:Bounds x="330" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_approver_opinion" bpmnElement="task_approver_opinion">
+        <omgdc:Bounds x="480" y="185" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_endEvent" bpmnElement="endEvent">
+        <omgdc:Bounds x="1280" y="200" width="28" height="28" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
